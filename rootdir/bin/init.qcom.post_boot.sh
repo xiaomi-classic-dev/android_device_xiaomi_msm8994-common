@@ -32,8 +32,6 @@ case "$target" in
     "msm8992")
         # ensure at most one A57 is online when thermal hotplug is disabled
         echo 0 > /sys/devices/system/cpu/cpu5/online
-        # in case CPU4 is online, limit its frequency
-        echo 960000 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq
         # Limit A57 max freq from msm_perf module in case CPU 4 is offline
         echo "4:960000 5:960000" > /sys/module/msm_performance/parameters/cpu_max_freq
         # disable thermal bcl hotplug to switch governor
@@ -83,9 +81,7 @@ case "$target" in
         echo 80000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis
         echo 384000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
         # online CPU4
-        echo 1 > /sys/devices/system/cpu/cpu4/online
-        # Best effort limiting for first time boot if msm_performance module is absent
-        echo 960000 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq
+        echo 1 > /sys/devices/system/cpu/cpu4/onlines
         # configure governor settings for big cluster
         echo "interactive" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
         echo 1 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load
@@ -99,8 +95,6 @@ case "$target" in
         echo 40000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time
         echo 80000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis
         echo 384000 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
-        # restore A57's max
-        cat /sys/devices/system/cpu/cpu4/cpufreq/cpuinfo_max_freq > /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq
         # insert core_ctl module and use conservative paremeters
         insmod /system/lib/modules/core_ctl.ko
         # re-enable thermal and BCL hotplug
