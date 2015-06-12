@@ -149,6 +149,8 @@ case "$target" in
         echo 200000000 > /proc/sys/kernel/sched_min_runtime
         echo 400000 > /proc/sys/kernel/sched_freq_inc_notify
         echo 400000 > /proc/sys/kernel/sched_freq_dec_notify
+        # android background processes are set to nice 10. Never schedule these on the a57s.
+        write /proc/sys/kernel/sched_upmigrate_min_nice 9
         #relax access permission for display power consumption
         chown -h system /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
         chown -h system /sys/devices/system/cpu/cpu4/core_ctl/max_cpus
@@ -294,6 +296,8 @@ case "$target" in
         done
         echo 400000 > /proc/sys/kernel/sched_freq_inc_notify
         echo 400000 > /proc/sys/kernel/sched_freq_dec_notify
+        # android background processes are set to nice 10. Never schedule these on the a57s.
+        write /proc/sys/kernel/sched_upmigrate_min_nice 9
         echo 0 > /proc/sys/kernel/sched_boost
         #relax access permission for display power consumption
         chown -h system /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
