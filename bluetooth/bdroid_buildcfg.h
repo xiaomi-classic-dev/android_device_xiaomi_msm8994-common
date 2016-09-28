@@ -46,7 +46,7 @@ static inline const char* BtmGetDefaultName()
 #define BLUETOOTH_QTI_SW TRUE
 
 #define BTM_DEF_LOCAL_NAME BtmGetDefaultName()
-#define MAX_ACL_CONNECTIONS 7
+#define MAX_ACL_CONNECTIONS 16
 #define MAX_L2CAP_CHANNELS  16
 
 #define BTA_SKIP_BLE_READ_REMOTE_FEAT TRUE
