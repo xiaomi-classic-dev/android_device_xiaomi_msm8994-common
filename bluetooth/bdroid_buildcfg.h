@@ -53,4 +53,6 @@ static inline const char* BtmGetDefaultName()
 #define BTA_BLE_SKIP_CONN_UPD  TRUE
 #pragma pop_macro("PROPERTY_VALUE_MAX")
 
+/* Increasing SEPs to 12 from 6 to support SHO/MCast i.e. two streams per codec */
+#define AVDT_NUM_SEPS 12
 #endif
