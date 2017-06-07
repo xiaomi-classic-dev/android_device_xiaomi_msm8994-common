@@ -487,6 +487,7 @@ service qcom-post-boot /system/vendor/bin/init.qcom.post_boot.sh
     oneshot
 
 on property:sys.boot_completed=1
+    setprop vendor.post_boot.parsed 1
     start qcom-post-boot
 
 on property:ro.data.large_tcp_window_size=true
