@@ -25,6 +25,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     debug.sf.hw=1 \
     debug.egl.hw=1 \
+    debug.sf.latch_unsignaled=1 \
     debug.composition.type=c2d \
     persist.hwc.mdpcomp.enable=true \
     persist.mdpcomp.4k2kSplit=1 \
