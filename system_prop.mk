@@ -99,8 +99,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Additional i/p buffer in case of encoder DCVS
 PRODUCT_PROPERTY_OVERRIDES += \
-    vidc.enc.dcvs.extra-buff-count=2 \
-    persist.media.treble_omx=false
+    vidc.enc.dcvs.extra-buff-count=2
 
 #
 # system props for the data modules
