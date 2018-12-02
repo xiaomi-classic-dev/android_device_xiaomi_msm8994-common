@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Copyright (c) 2014, The Linux Foundation. All rights reserved.
+    Copyright (c) 2018, The Linux Foundation. All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions are
@@ -25,10 +25,32 @@
     BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
     WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
     OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
-    IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
+    IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
-
-<resources>
-   <!-- configuration for SMS save location preference -->
-   <bool name="config_savelocation">true</bool>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Do not translate. Defines the slots is Two Digit Number for dialing normally not USSD -->
+    <string-array name="config_twoDigitNumberPattern">
+        <item>"0"</item>
+        <item>"00"</item>
+        <item>"*0"</item>
+        <item>"*1"</item>
+        <item>"*2"</item>
+        <item>"*3"</item>
+        <item>"*4"</item>
+        <item>"*5"</item>
+        <item>"*6"</item>
+        <item>"*7"</item>
+        <item>"*8"</item>
+        <item>"*9"</item>
+        <item>"#0"</item>
+        <item>"#1"</item>
+        <item>"#2"</item>
+        <item>"#3"</item>
+        <item>"#4"</item>
+        <item>"#5"</item>
+        <item>"#6"</item>
+        <item>"#7"</item>
+        <item>"#8"</item>
+        <item>"#9"</item>
+    </string-array>
 </resources>
