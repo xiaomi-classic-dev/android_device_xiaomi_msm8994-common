@@ -281,6 +281,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.power.useautobrightadj=true \
     persist.radio.apm_sim_not_pwdn=1
 
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    ro.surface_flinger.max_frame_buffer_acquired_buffers=3
+
 # Maintainer
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.mk.maintainer=guaiyihu
