@@ -254,6 +254,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.force_on_dc=true
 
+# Memory optimizations
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.vendor.qti.sys.fw.bservice_enable=true
+
 #Enable short oos enhancement
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.sys.oosenhance.enable=true \
