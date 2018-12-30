@@ -1,15 +1,11 @@
 BOARD_VENDOR := xiaomi
 
-DEVICE_PATH := device/xiaomi/leo
+COMMON_PATH := device/xiaomi/msm8994-common
 
-TARGET_SPECIFIC_HEADER_PATH := device/xiaomi/leo/include
+TARGET_SPECIFIC_HEADER_PATH := $(COMMON_PATH)/include
 
 # Platform
-TARGET_BOARD_PLATFORM := msm8994
-TARGET_BOOTLOADER_BOARD_NAME := msm8994
 TARGET_NO_BOOTLOADER := true
-BOOTLOADER_PLATFORM := msm8994 # use msm8994 LK configuration
-TARGET_BOARD_PLATFORM_GPU := qcom-adreno430
 TARGET_BOARD_SUFFIX := _64
 
 # Arch
@@ -17,7 +13,6 @@ TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
 TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_ABI2 :=
-TARGET_CPU_VARIANT := cortex-a53
 TARGET_2ND_ARCH := arm
 TARGET_2ND_ARCH_VARIANT := armv8-a
 TARGET_2ND_CPU_ABI := armeabi-v7a
@@ -86,7 +81,7 @@ USE_CUSTOM_AUDIO_POLICY := 1
 # Bluetooth
 BOARD_HAVE_BLUETOOTH_QCOM := true
 BOARD_HAS_QCA_BT_ROME := true
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/xiaomi/leo/bluetooth
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(COMMON_PATH)/bluetooth
 QCOM_BT_USE_BTNV := true
 QCOM_BT_USE_SMD_TTY := true
 WCNSS_FILTER_USES_SIBS := true
@@ -96,7 +91,6 @@ TARGET_EXFAT_DRIVER := exfat
 
 # Kernel
 TARGET_KERNEL_SOURCE := kernel/xiaomi/leo
-TARGET_KERNEL_CONFIG := leo_user_defconfig
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 boot_cpus=0-5 androidboot.selinux=permissive
 BOARD_KERNEL_BASE        := 0x00000000
 BOARD_KERNEL_PAGESIZE    := 4096
@@ -107,12 +101,10 @@ TARGET_KERNEL_HEADER_ARCH := arm64
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
 BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 
-# Fix this up by examining /proc/mtd on a running device
+# Partition
 BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864 #64M
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 67108864 #64M
-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1744830464 #1920M
 BOARD_CACHEIMAGE_PARTITION_SIZE := 402653184 #384M
-BOARD_USERDATAIMAGE_PARTITION_SIZE := 59852700672 #58G
 TARGET_USERIMAGES_USE_EXT4 := true
 ifneq (,$(filter linux darwin, $(HOST_OS)))
 TARGET_USERIMAGES_USE_F2FS := true
@@ -149,11 +141,11 @@ TARGET_HW_DISK_ENCRYPTION := false
 TARGET_PER_MGR_ENABLED := true
 
 # HIDL
-DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/manifest.xml
-DEVICE_MATRIX_FILE := $(DEVICE_PATH)/compatibility_matrix.xml
+DEVICE_MANIFEST_FILE := $(COMMON_PATH)/manifest.xml
+DEVICE_MATRIX_FILE := $(COMMON_PATH)/compatibility_matrix.xml
 
 # Filesystem
-TARGET_FS_CONFIG_GEN := $(DEVICE_PATH)/config.fs
+TARGET_FS_CONFIG_GEN := $(COMMON_PATH)/config.fs
 
 # Power
 TARGET_HAS_NO_WLAN_STATS := true
@@ -164,9 +156,6 @@ BOARD_USES_QCOM_HARDWARE := true
 
 # Time services
 BOARD_USES_QC_TIME_SERVICES := true
-
-# MK Hardware
-JAVA_SOURCE_OVERLAYS := org.mokee.hardware|$(DEVICE_PATH)/mkhw|**/*.java
 
 # Ril
 FEATURE_QCRIL_UIM_SAP_SERVER_MODE := true
@@ -195,34 +184,27 @@ WPA_SUPPLICANT_VERSION          := VER_0_8_X
 
 # Recovery
 BOARD_HAS_LARGE_FILESYSTEM := true
-TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab.full
+TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/rootdir/etc/fstab.full
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 
 # Releasetools
-TARGET_RECOVERY_UPDATER_LIBS := librecovery_updater_leo
-TARGET_RELEASETOOLS_EXTENSIONS := $(DEVICE_PATH)
-
-# Assertions
-TARGET_BOARD_INFO_FILE ?= $(DEVICE_PATH)/board-info.txt
-TARGET_OTA_ASSERT_DEVICE := NotePro,leo
+TARGET_RECOVERY_UPDATER_LIBS := librecovery_updater_msm8994
+TARGET_RELEASETOOLS_EXTENSIONS := $(COMMON_PATH)
 
 # SELinux
 include device/qcom/sepolicy-legacy/sepolicy.mk
 
-BOARD_SEPOLICY_DIRS += device/xiaomi/leo/sepolicy
-
-# Security patch level
-VENDOR_SECURITY_PATCH := 2017-10-01
+BOARD_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy
 
 # Shims
-TARGET_LD_SHIM_LIBS := /system/vendor/lib64/libril-qc-qmi-1.so|rild_socket.so:/system/vendor/lib/libmmcamera2_stats_algorithm.so|libshim_atomic.so:/system/vendor/lib64/libizat_core.so|libshims_get_process_name.so:/system/vendor/lib/hw/camera.vendor.msm8994.so|libshim_camera.so
+TARGET_LD_SHIM_LIBS += /system/vendor/lib64/libril-qc-qmi-1.so|rild_socket.so:/system/vendor/lib/libmmcamera2_stats_algorithm.so|libshim_atomic.so:/system/vendor/lib64/libizat_core.so|libshims_get_process_name.so
 
 # TWRP Support
 ifeq ($(WITH_TWRP),true)
--include $(DEVICE_PATH)/twrp/twrp.mk
+-include $(COMMON_PATH)/twrp/twrp.mk
 endif
 
 # Inherit from the proprietary version
--include vendor/xiaomi/leo/BoardConfigVendor.mk
+-include vendor/xiaomi/msm8994-common/BoardConfigVendor.mk
