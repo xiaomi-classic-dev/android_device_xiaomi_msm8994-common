@@ -376,12 +376,12 @@ vendor/lib/libdisp-aba.so
 vendor/lib/libmm-abl-oem.so
 vendor/lib/libmm-abl.so
 vendor/lib/libmm-als.so
-vendor/lib/libmm-qdcm.so
+vendor/lib/libmm-qdcm.so|487ab788ed15d1e3d6012344a5c8a1b931fbecd9
 vendor/lib64/libdisp-aba.so
 vendor/lib64/libmm-abl-oem.so
 vendor/lib64/libmm-abl.so
 vendor/lib64/libmm-als.so
-vendor/lib64/libmm-qdcm.so
+vendor/lib64/libmm-qdcm.so|7e987bdc72d46b9f5e8f3a0ba7083494a3bf888f
 
 # Media
 vendor/lib/libmm-color-convertor.so
