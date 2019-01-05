@@ -89,6 +89,9 @@ WCNSS_FILTER_USES_SIBS := true
 # EXFAT
 TARGET_EXFAT_DRIVER := exfat
 
+# Fonts
+USE_REDUCED_CJK_FONT_WEIGHTS := true
+
 # Kernel
 TARGET_KERNEL_SOURCE := kernel/xiaomi/leo
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 boot_cpus=0-5 androidboot.selinux=permissive
