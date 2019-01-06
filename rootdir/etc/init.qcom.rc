@@ -185,15 +185,6 @@ on boot
     # Wifi firmware reload path
     chown wifi wifi /sys/module/wlan/parameters/fwpath
 
-    #doubletap to wake
-    chown system system /sys/devices/soc.0/f9924000.i2c/i2c-2/2-0070/input/input1/wake_gesture
-
-    #edge gesture
-    chown system system /sys/devices/soc.0/f9924000.i2c/i2c-2/2-0070/input/input1/edge_mode
-
-    #keydisabler
-    chown system system /sys/devices/soc.0/f9924000.i2c/i2c-2/2-0070/input/input1/0dbutton
-
     #VibratorHW
     chown system system /sys/devices/virtual/timed_output/vibrator/amp
 
@@ -310,11 +301,6 @@ on post-fs-data
 
     chown system system /sys/class/rtc/rtc0/wakealarm
     chmod 0666 /sys/class/rtc/rtc0/wakealarm
-
-    # Key disabler
-    chown root system /sys/bus/i2c/drivers/cyttsp_streetfighter/2-0028/keys_off
-    chmod 0664 /sys/bus/i2c/drivers/cyttsp_streetfighter/2-0028/keys_off
-    restorecon /sys/bus/i2c/drivers/cyttsp_streetfighter/2-0028/keys_off
 
     # Vibrator
     chown system system /sys/class/timed_output/vibrator/vtg_default
