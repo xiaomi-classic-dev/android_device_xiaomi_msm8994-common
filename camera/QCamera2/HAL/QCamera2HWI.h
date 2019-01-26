@@ -35,7 +35,7 @@
 #include <utils/Log.h>
 #include <utils/Mutex.h>
 #include <utils/Condition.h>
-#include <QCameraParameters.h>
+#include "QCameraParameters.h"
 
 #include "QCameraQueue.h"
 #include "QCameraCmdThread.h"
