@@ -339,7 +339,6 @@ vendor/lib64/libsystem_health_mon.so
 vendor/qcril.db
 
 # Thermal
-bin/energy-awareness:vendor/bin/energy-awareness
 bin/msm_irqbalance:vendor/bin/msm_irqbalance
 vendor/bin/perfd
 vendor/bin/thermal-engine|5c0edf1e5202c8948179f2151e7ff2211a5da9e2
