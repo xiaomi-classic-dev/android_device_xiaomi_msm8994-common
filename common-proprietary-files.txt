@@ -223,15 +223,6 @@ vendor/lib64/libOmxMux.so
 vendor/lib64/libOmxWmaDec.so
 vendor/lib64/libmmosal.so
 
-# Media firmware
-etc/firmware/venus.b00:vendor/firmware/venus.b00
-etc/firmware/venus.b01:vendor/firmware/venus.b01
-etc/firmware/venus.b02:vendor/firmware/venus.b02
-etc/firmware/venus.b03:vendor/firmware/venus.b03
-etc/firmware/venus.b04:vendor/firmware/venus.b04
-etc/firmware/venus.mbn:vendor/firmware/venus.mbn
-etc/firmware/venus.mdt:vendor/firmware/venus.mdt
-
 # Peripheral manager
 bin/pm-proxy:vendor/bin/pm-proxy
 bin/pm-service:vendor/bin/pm-service
