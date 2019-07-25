@@ -25,7 +25,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Start in TD-SCDMA, GSM/WCDMA and LTE mode
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.telephony.default_network=20,20 \
+    ro.telephony.default_network=10 \
     ro.telephony.default_cdma_sub=0
 
 PRODUCT_PROPERTY_OVERRIDES += \
