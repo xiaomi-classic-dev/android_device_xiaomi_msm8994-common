@@ -44,7 +44,6 @@ on fs
 service qcom-usb-sh /system/vendor/bin/init.qcom.usb.sh
     class core
     user root
-    seclabel u:r:qti_init_shell:s0
     oneshot
 
 # Following are the parameters required for usb functionality. They provide configurable options like
