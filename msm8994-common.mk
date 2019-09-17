@@ -253,10 +253,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_BOOT_JARS += \
     telephony-ext
 
-# Thermal HAL
-PRODUCT_PACKAGES += \
-    android.hardware.thermal@1.0-impl
-
 # Trust HAL
 PRODUCT_PACKAGES += \
     vendor.mokee.trust@1.0-service
