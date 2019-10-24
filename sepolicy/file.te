@@ -1,6 +1,1 @@
-<<<<<<< HEAD
 type tmp_root_mount_file, file_type;
-=======
-# for /dev/lirc0
-type lirc_device, file_type;
->>>>>>> parent of 23efd6a... [DNM]msm8994-common: Disable sepolicy
