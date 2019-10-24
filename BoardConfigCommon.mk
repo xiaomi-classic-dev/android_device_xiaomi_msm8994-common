@@ -206,6 +206,11 @@ TARGET_RECOVERY_UPDATER_LIBS := librecovery_updater_msm8994
 TARGET_RELEASETOOLS_EXTENSIONS := $(COMMON_PATH)
 
 # SELinux
+<<<<<<< HEAD
+=======
+include device/qcom/sepolicy-legacy/sepolicy.mk
+
+>>>>>>> parent of 23efd6a... [DNM]msm8994-common: Disable sepolicy
 BOARD_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy
 
 # Shims
