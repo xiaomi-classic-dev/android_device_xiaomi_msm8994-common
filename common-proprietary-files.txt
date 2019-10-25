@@ -13,8 +13,8 @@ vendor/lib64/libadsprpc.so
 vendor/lib64/libmdsprpc.so
 
 # AptX
-vendor/lib64/libaptX_encoder.so|0cebad28afcf29f931bdc2d24fce2730dc882ecf
-vendor/lib64/libaptXHD_encoder.so|90f47f10af28b3ead143200cb4370b847c513127
+#vendor/lib64/libaptX_encoder.so|0cebad28afcf29f931bdc2d24fce2730dc882ecf
+#vendor/lib64/libaptXHD_encoder.so|90f47f10af28b3ead143200cb4370b847c513127
 
 # Audio
 vendor/lib/libacdb-fts.so
@@ -53,7 +53,7 @@ vendor/lib64/libbtnv.so
 etc/permissions/com.quicinc.cne.xml:vendor/etc/permissions/com.quicinc.cne.xml|bd1e5321176d9c10411a942743d976fb80418319
 framework/com.quicinc.cne.api-V1.0-java.jar:vendor/framework/com.quicinc.cne.api-V1.0-java.jar|6fb1bf2ea642ce0f0c8c4716639cab7a9810cc3e
 framework/com.quicinc.cne.jar:vendor/framework/com.quicinc.cne.jar|88fc21cd7dd69ae37607a9a671d4913d82c2e336
-vendor/bin/cnd|fc7ad0d8041e35df029531ad6b5e972fdbfbfbc3
+#vendor/bin/cnd|fc7ad0d8041e35df029531ad6b5e972fdbfbfbc3
 -vendor/lib/com.quicinc.cne.api@1.0.so|60dd6f1fa0c70523f91342b07be6c82e733cdb90
 -vendor/lib/com.quicinc.cne.constants@1.0.so|0d3b2fd95e8ea3525467d8ca38865ac2a9d3f4c7
 -vendor/lib/com.quicinc.cne.constants@2.0.so|0f5cdca41024ece0b3c7006113e4f11c5b00b9c3
