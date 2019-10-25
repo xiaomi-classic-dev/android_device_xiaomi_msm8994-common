@@ -89,7 +89,11 @@ USE_REDUCED_CJK_FONT_WEIGHTS := true
 
 # Kernel
 TARGET_KERNEL_SOURCE := kernel/xiaomi/libra
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 boot_cpus=0-5 loop.max_part=7 androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 
+BOARD_KERNEL_CMDLINE += lpm_levels.sleep_disabled=1 sched_enable_hmp=1 sched_enable_power_aware=1 
+BOARD_KERNEL_CMDLINE += boot_cpus=0-5 loop.max_part=7 
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE += swiotlb=2048
 BOARD_KERNEL_BASE        := 0x00000000
 BOARD_KERNEL_PAGESIZE    := 4096
 BOARD_KERNEL_TAGS_OFFSET := 0x00000100
@@ -231,3 +235,6 @@ ifeq ($(HOST_OS),linux)
     endif
   endif
 endif
+
+# Build
+BUILD_BROKEN_DUP_RULES := true
