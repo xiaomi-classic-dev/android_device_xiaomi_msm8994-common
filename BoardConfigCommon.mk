@@ -218,3 +218,6 @@ endif
 
 # Inherit from the proprietary version
 -include vendor/xiaomi/msm8994-common/BoardConfigVendor.mk
+
+# APEX
+DEXPREOPT_GENERATE_APEX_IMAGE := true
