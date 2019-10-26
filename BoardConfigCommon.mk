@@ -18,6 +18,7 @@ TARGET_2ND_ARCH_VARIANT := armv8-a
 TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := cortex-a53.a57
+
 TARGET_USES_64_BIT_BINDER := true
 TARGET_CPU_SMP := true
 
@@ -116,7 +117,8 @@ BOARD_QTI_CAMERA_32BIT_ONLY := true
 TARGET_USES_MEDIA_EXTENSIONS := true
 TARGET_CAMERASERVICE_CLOSES_NATIVE_HANDLES := true
 TARGET_NEEDS_LEGACY_CAMERA_HAL1_DYN_NATIVE_HANDLE := true
-TARGET_PROCESS_SDK_VERSION_OVERRIDE := $(TARGET_COPY_OUT_SYSTEM)/vendor/bin/mm-qcamera-daemon=22
+TARGET_PROCESS_SDK_VERSION_OVERRIDE := \
+    /system/vendor/bin/mm-qcamera-daemon=22
 
 # Charger
 BOARD_CHARGER_ENABLE_SUSPEND := true
@@ -202,7 +204,7 @@ TARGET_RELEASETOOLS_EXTENSIONS := $(COMMON_PATH)
 BOARD_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy
 
 # Shims
-TARGET_LD_SHIM_LIBS += $(TARGET_COPY_OUT_SYSTEM)/vendor/lib64/libril-qc-qmi-1.so|rild_socket.so:$(TARGET_COPY_OUT_SYSTEM)/vendor/lib/libmmcamera2_stats_algorithm.so|libshim_atomic.so:$(TARGET_COPY_OUT_SYSTEM)/vendor/lib64/libizat_core.so|libshims_get_process_name.so
+TARGET_LD_SHIM_LIBS += /system/vendor/lib64/libril-qc-qmi-1.so|rild_socket.so:/system/vendor/lib/libmmcamera2_stats_algorithm.so|libshim_atomic.so:/system/vendor/lib64/libizat_core.so|libshims_get_process_name.so
 
 # TWRP Support
 ifeq ($(WITH_TWRP),true)
