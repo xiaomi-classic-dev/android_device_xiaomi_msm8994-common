@@ -292,5 +292,9 @@ PRODUCT_PACKAGES += \
     ueventd.qcom.rc \
     init.qcom.post_boot.sh
 
+ # Set default USB interface
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    persist.sys.usb.config=mtp,adb   
+
 # Enable updating of APEXes
 $(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
