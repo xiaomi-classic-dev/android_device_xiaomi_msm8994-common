@@ -29,16 +29,13 @@ import /vendor/etc/init/hw/init.qcom.usb.rc
 import /vendor/etc/init/hw/init.target.rc
 
 on early-init
+
     # Mount debugfs
     mount debugfs debugfs /sys/kernel/debug
     chown system system /sys/kernel/debug
     chmod 0775 /sys/kernel/debug
 
 on init
-
-    # Support legacy paths
-    symlink /sdcard /mnt/sdcard
-    symlink /sdcard /storage/sdcard0
 
     # Create cgroup mount point for memory
     mkdir /sys/fs/cgroup/memory/bg 0750 root system
