@@ -85,6 +85,7 @@ BOARD_KERNEL_CMDLINE += lpm_levels.sleep_disabled=1
 BOARD_KERNEL_CMDLINE += boot_cpus=0-5 loop.max_part=7 
 BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 BOARD_KERNEL_CMDLINE += swiotlb=2048
+BOARD_KERNEL_CMDLINE += firmware_class.path=/vendor/firmware_mnt/image
 BOARD_KERNEL_BASE        := 0x00000000
 BOARD_KERNEL_PAGESIZE    := 4096
 BOARD_KERNEL_TAGS_OFFSET := 0x00000100
@@ -98,11 +99,15 @@ BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864 #64M
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 67108864 #64M
 BOARD_CACHEIMAGE_PARTITION_SIZE := 402653184 #384M
-BOARD_ROOT_EXTRA_FOLDERS := firmware bt_firmware persist
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_FLASH_BLOCK_SIZE := 131072
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
+
+BOARD_ROOT_EXTRA_SYMLINKS := \
+    /mnt/vendor/persist:/persist \
+    /vendor/bt_firmware:/bt_firmware \
+    /vendor/firmware_mnt:/firmware
 
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 
