@@ -227,8 +227,7 @@ PRODUCT_PACKAGES += \
 
 # Power
 PRODUCT_PACKAGES += \
-    android.hardware.power@1.0-impl \
-    power.msm8992
+    android.hardware.power@1.2-service-qti
 
 # Seccomp
 PRODUCT_COPY_FILES += \
