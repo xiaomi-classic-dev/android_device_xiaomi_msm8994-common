@@ -81,7 +81,7 @@ USE_REDUCED_CJK_FONT_WEIGHTS := true
 # Kernel
 TARGET_KERNEL_SOURCE := kernel/xiaomi/libra
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 
-BOARD_KERNEL_CMDLINE += lpm_levels.sleep_disabled=1 sched_enable_hmp=1 sched_enable_power_aware=1 
+BOARD_KERNEL_CMDLINE += lpm_levels.sleep_disabled=1
 BOARD_KERNEL_CMDLINE += boot_cpus=0-5 loop.max_part=7 
 BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 BOARD_KERNEL_CMDLINE += swiotlb=2048
@@ -126,10 +126,10 @@ ifeq ($(HOST_OS),linux)
   ifneq ($(TARGET_BUILD_VARIANT),eng)
     ifeq ($(WITH_DEXPREOPT),)
       WITH_DEXPREOPT := true
-      WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
     endif
   endif
 endif
+WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
 
 # Added to indicate that protobuf-c is supported in this build
 PROTOBUF_SUPPORTED := true
@@ -151,7 +151,8 @@ TARGET_FS_CONFIG_GEN := $(COMMON_PATH)/config.fs
 USE_DEVICE_SPECIFIC_DATA_IPA_CFG_MGR := true
 
 # Power
-TARGET_HAS_NO_WLAN_STATS := true
+TARGET_POWERHAL_VARIANT := qcom
+TARGET_PROVIDES_POWERHAL := true
 TARGET_USES_INTERACTION_BOOST := true
 
 # Qualcomm support
