@@ -22,13 +22,33 @@
 #ifndef _BDROID_BUILDCFG_H
 #define _BDROID_BUILDCFG_H
 
+#include <cutils/properties.h>
+#include <string.h>
+
+static inline const char* BtmGetDefaultName()
+{
+    char product_device[PROPERTY_VALUE_MAX];
+    property_get("ro.product.device", product_device, "");
+
+    if (strstr(product_device, "aqua"))
+        return "Xiaomi Mi 4S";
+    if (strstr(product_device, "leo"))
+        return "Xiaomi Mi Note Pro";
+    if (strstr(product_device, "libra"))
+        return "Xiaomi Mi 4C";
+
+    // Fallback to ro.product.model
+    return "";
+}
+
 #define BLUETOOTH_QTI_SW TRUE
 
-#define BTM_DEF_LOCAL_NAME   "Xiaomi Note Pro"
+#define BTM_DEF_LOCAL_NAME BtmGetDefaultName()
 #define MAX_ACL_CONNECTIONS 7
 #define MAX_L2CAP_CHANNELS  16
 
 #define BTA_SKIP_BLE_READ_REMOTE_FEAT TRUE
 #define BTA_BLE_SKIP_CONN_UPD  TRUE
+#undef PROPERTY_VALUE_MAX
 
 #endif
