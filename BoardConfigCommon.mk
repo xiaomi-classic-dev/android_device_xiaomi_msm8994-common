@@ -1,3 +1,5 @@
+BUILD_BROKEN_USES_BUILD_COPY_HEADERS := true
+
 BOARD_VENDOR := xiaomi
 
 COMMON_PATH := device/xiaomi/msm8994-common
