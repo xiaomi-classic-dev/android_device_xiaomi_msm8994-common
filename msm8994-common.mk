@@ -118,6 +118,11 @@ PRODUCT_PACKAGES += \
     libcnefeatureconfig \
     services-ext
 
+# Dummy hidl lib for oreo blobs
+PRODUCT_PACKAGES += \
+    libhidltransport \
+    libhwbinder
+
 # GPS
 PRODUCT_PACKAGES += \
     gps.$(BOARD_PLATFORM) \
