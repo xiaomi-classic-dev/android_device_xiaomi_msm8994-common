@@ -179,6 +179,9 @@ TARGET_REMOVE_SECDISCARD_COMMAND := true
 # Added to indicate that protobuf-c is supported in this build
 PROTOBUF_SUPPORTED := true
 
+# Vintf
+PRODUCT_ENFORCE_VINTF_MANIFEST_OVERRIDE := true
+
 # Wifi
 BOARD_HAS_QCOM_WLAN             := true
 BOARD_HAS_QCOM_WLAN_SDK         := true
