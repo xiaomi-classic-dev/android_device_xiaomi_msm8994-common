@@ -161,6 +161,10 @@ PRODUCT_PACKAGES += \
     android.hardware.memtrack@1.0-impl \
     android.hardware.graphics.composer@2.1-impl
 
+# Health
+PRODUCT_PACKAGES += \
+    android.hardware.health@2.0-service
+
 # IPv6
 PRODUCT_PACKAGES += \
     ebtables \
