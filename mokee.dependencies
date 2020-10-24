@@ -4,6 +4,10 @@
     "target_path": "kernel/xiaomi/leo"
   },
   {
+    "repository": "android_hardware_sony_timekeep",
+    "target_path": "hardware/sony/timekeep"
+  },
+  {
     "repository": "android_vendor_xiaomi_msm8994-common",
     "target_path": "vendor/xiaomi/msm8994-common"
   }
