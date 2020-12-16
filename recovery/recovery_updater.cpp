@@ -171,8 +171,6 @@ Value * VerifyTrustZoneFn(const char *name, State *state, const std::vector<std:
 
     ret = 0;
     for (i = 0; i < argv.size(); i++) {
-        uiPrintf(state, "Comparing TZ version %s to %s",
-                tz_version[i].c_str(), current_tz_version);
         if (strncmp(tz_version[i].c_str(), current_tz_version, tz_version[i].length()) == 0) {
             ret = 1;
             break;
