@@ -324,7 +324,7 @@ vendor/lib64/libril-qc-qmi-1.so
 vendor/lib64/libril-qc-radioconfig.so
 vendor/lib64/libril-qcril-hook-oem.so
 vendor/lib64/librilqmiservices.so
-vendor/lib64/libsettings.so|4609cacca0a56dae2596687c8f5f2f9423d4d0d9
+vendor/lib64/libsettings.so|0bbbb239fb6091b6edd3505367710ef97e80bf3d
 vendor/lib64/libsystem_health_mon.so
 vendor/qcril.db
 
