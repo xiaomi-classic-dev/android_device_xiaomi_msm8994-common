@@ -230,15 +230,6 @@
             <instance>cnd</instance>
         </interface>
     </hal>
-    <hal format="hidl">
-        <name>vendor.mokee.trust</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IUsbRestrict</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
     <sepolicy>
         <version>0.0</version>
     </sepolicy>
