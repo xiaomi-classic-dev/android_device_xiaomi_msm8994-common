@@ -356,7 +356,7 @@ vendor/lib64/libthermalioctl.so
 bin/cnss-daemon:vendor/bin/cnss-daemon
 
 # Postprocessing
-bin/mm-pp-daemon:vendor/bin/mm-pp-daemon
+vendor/bin/mm-pp-daemon|9cdb2648c704532df2a02e7109c2800dc884653d
 vendor/lib/libdisp-aba.so
 vendor/lib/libmm-abl-oem.so
 vendor/lib/libmm-abl.so
@@ -366,7 +366,9 @@ vendor/lib64/libdisp-aba.so
 vendor/lib64/libmm-abl-oem.so
 vendor/lib64/libmm-abl.so
 vendor/lib64/libmm-als.so
+vendor/lib64/libmm-dspp-utils.so|e2abf175b71ceeaa253f7078f8e08417995991a7
 vendor/lib64/libmm-qdcm.so|7e987bdc72d46b9f5e8f3a0ba7083494a3bf888f
+vendor/lib64/libmm-qdcm-diag.so|3775629a0d06dfd8c07738babc43e4cb2eb3fa9d
 
 # Media
 vendor/lib/libmm-color-convertor.so
