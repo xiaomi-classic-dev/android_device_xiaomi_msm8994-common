@@ -8,7 +8,7 @@ $(call inherit-product-if-exists, vendor/xiaomi/msm8994-common/msm8994-common-ve
 
 DEVICE_PACKAGE_OVERLAYS += \
     $(LOCAL_PATH)/overlay \
-    $(LOCAL_PATH)/overlay-mokee
+    $(LOCAL_PATH)/overlay-lineage
 
 # Media
 PRODUCT_COPY_FILES += \
@@ -194,7 +194,7 @@ PRODUCT_PACKAGES += \
 
 # LiveDisplay
 PRODUCT_PACKAGES += \
-    vendor.mokee.livedisplay@2.0-service-legacymm
+    vendor.lineage.livedisplay@2.0-service-legacymm
 
 # OMX
 PRODUCT_PACKAGES += \
@@ -263,7 +263,7 @@ PRODUCT_PACKAGES += \
 
 # Trust HAL
 PRODUCT_PACKAGES += \
-    vendor.mokee.trust@1.0-service
+    vendor.lineage.trust@1.0-service
 
 # USB HAL
 PRODUCT_PACKAGES += \
@@ -271,7 +271,7 @@ PRODUCT_PACKAGES += \
 
 # Vibrator
 PRODUCT_PACKAGES += \
-    android.hardware.vibrator@1.0-service.mokee
+    android.hardware.vibrator@1.0-service.lineage
 
 # VNDK
 PRODUCT_COPY_FILES += \
