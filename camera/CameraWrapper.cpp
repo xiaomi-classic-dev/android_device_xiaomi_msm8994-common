@@ -35,8 +35,10 @@
 #include <camera/Camera.h>
 #include <camera/CameraParameters.h>
 #include <media/hardware/HardwareAPI.h> // For VideoNativeHandleMetadata
+#include <system/camera_metadata.h>
 
 static android::Mutex gCameraWrapperLock;
+static android::Mutex gCameraMetadataLock;
 static camera_module_t *gVendorModule = 0;
 
 static camera_notify_callback gUserNotifyCb = NULL;
@@ -46,11 +48,19 @@ static camera_request_memory gUserGetMemory = NULL;
 static void *gUserCameraDevice = NULL;
 
 static char **fixed_set_params = NULL;
+static int fixed_set_params_count = 0;
+static camera_metadata_t **gFixedCameraMetadata = NULL;
 
 static int camera_device_open(const hw_module_t *module, const char *name,
         hw_device_t **device);
 static int camera_get_number_of_cameras(void);
 static int camera_get_camera_info(int camera_id, struct camera_info *info);
+static int camera_set_module_callbacks(const camera_module_callbacks_t *callbacks);
+static void camera_get_vendor_tag_ops(vendor_tag_ops_t *ops);
+static int camera_open_legacy(const hw_module_t *module, const char *id,
+        uint32_t hal_version, hw_device_t **device);
+static int camera_set_torch_mode(const char *camera_id, bool enabled);
+static int camera_module_init(void);
 
 static struct hw_module_methods_t camera_module_methods = {
     .open = camera_device_open
@@ -59,7 +69,7 @@ static struct hw_module_methods_t camera_module_methods = {
 camera_module_t HAL_MODULE_INFO_SYM = {
     .common = {
         .tag = HARDWARE_MODULE_TAG,
-        .module_api_version = CAMERA_MODULE_API_VERSION_1_0,
+        .module_api_version = CAMERA_MODULE_API_VERSION_2_4,
         .hal_api_version = HARDWARE_HAL_API_VERSION,
         .id = CAMERA_HARDWARE_MODULE_ID,
         .name = "MSM8992 Camera Wrapper",
@@ -70,11 +80,11 @@ camera_module_t HAL_MODULE_INFO_SYM = {
     },
     .get_number_of_cameras = camera_get_number_of_cameras,
     .get_camera_info = camera_get_camera_info,
-    .set_callbacks = NULL, /* remove compilation warnings */
-    .get_vendor_tag_ops = NULL, /* remove compilation warnings */
-    .open_legacy = NULL, /* remove compilation warnings */
-    .set_torch_mode = NULL, /* remove compilation warnings */
-    .init = NULL, /* remove compilation warnings */
+    .set_callbacks = camera_set_module_callbacks,
+    .get_vendor_tag_ops = camera_get_vendor_tag_ops,
+    .open_legacy = camera_open_legacy,
+    .set_torch_mode = camera_set_torch_mode,
+    .init = camera_module_init,
     .reserved = {0}, /* remove compilation warnings */
 };
 
@@ -102,7 +112,7 @@ static int check_vendor_module()
     rv = hw_get_module_by_class("camera", "vendor",
             (const hw_module_t**)&gVendorModule);
     if (rv)
-        ALOGE("failed to open vendor camera module", __FUNCTION__);
+        ALOGE("%s: failed to open vendor camera module", __FUNCTION__);
     return rv;
 }
 
@@ -513,12 +523,11 @@ static int camera_device_close(hw_device_t *device)
         goto done;
     }
 
-    for (int i = 0; i < camera_get_number_of_cameras(); i++) {
-        if (fixed_set_params[i])
-            free(fixed_set_params[i]);
-    }
-
     wrapper_dev = (wrapper_camera_device_t*) device;
+    if (fixed_set_params && wrapper_dev->id < fixed_set_params_count) {
+        free(fixed_set_params[wrapper_dev->id]);
+        fixed_set_params[wrapper_dev->id] = NULL;
+    }
 
     wrapper_dev->vendor->common.close((hw_device_t*)wrapper_dev->vendor);
     if (wrapper_dev->base.ops)
@@ -541,14 +550,78 @@ done:
  * so this function will always only be called once per camera instance
  */
 
+static int wrap_camera1_device(const hw_module_t *module, int camera_id,
+        hw_device_t *vendor_device, hw_device_t **device)
+{
+    wrapper_camera_device_t *camera_device = NULL;
+    camera_device_ops_t *camera_ops = NULL;
+    int num_cameras = gVendorModule->get_number_of_cameras();
+
+    if (!fixed_set_params) {
+        fixed_set_params = (char **)calloc(num_cameras, sizeof(char *));
+        if (!fixed_set_params) {
+            ALOGE("parameter memory allocation failed");
+            return -ENOMEM;
+        }
+        fixed_set_params_count = num_cameras;
+    }
+
+    camera_device = (wrapper_camera_device_t*)calloc(1, sizeof(*camera_device));
+    if (!camera_device) {
+        ALOGE("camera_device allocation failed");
+        return -ENOMEM;
+    }
+    camera_device->id = camera_id;
+    camera_device->vendor = reinterpret_cast<camera_device_t *>(vendor_device);
+
+    camera_ops = (camera_device_ops_t*)calloc(1, sizeof(*camera_ops));
+    if (!camera_ops) {
+        ALOGE("camera_ops allocation failed");
+        free(camera_device);
+        return -ENOMEM;
+    }
+
+    camera_device->base.common.tag = HARDWARE_DEVICE_TAG;
+    camera_device->base.common.version = CAMERA_DEVICE_API_VERSION_1_0;
+    camera_device->base.common.module = const_cast<hw_module_t *>(module);
+    camera_device->base.common.close = camera_device_close;
+    camera_device->base.ops = camera_ops;
+
+    camera_ops->set_preview_window = camera_set_preview_window;
+    camera_ops->set_callbacks = camera_set_callbacks;
+    camera_ops->enable_msg_type = camera_enable_msg_type;
+    camera_ops->disable_msg_type = camera_disable_msg_type;
+    camera_ops->msg_type_enabled = camera_msg_type_enabled;
+    camera_ops->start_preview = camera_start_preview;
+    camera_ops->stop_preview = camera_stop_preview;
+    camera_ops->preview_enabled = camera_preview_enabled;
+    camera_ops->store_meta_data_in_buffers = camera_store_meta_data_in_buffers;
+    camera_ops->start_recording = camera_start_recording;
+    camera_ops->stop_recording = camera_stop_recording;
+    camera_ops->recording_enabled = camera_recording_enabled;
+    camera_ops->release_recording_frame = camera_release_recording_frame;
+    camera_ops->auto_focus = camera_auto_focus;
+    camera_ops->cancel_auto_focus = camera_cancel_auto_focus;
+    camera_ops->take_picture = camera_take_picture;
+    camera_ops->cancel_picture = camera_cancel_picture;
+    camera_ops->set_parameters = camera_set_parameters;
+    camera_ops->get_parameters = camera_get_parameters;
+    camera_ops->put_parameters = camera_put_parameters;
+    camera_ops->send_command = camera_send_command;
+    camera_ops->release = camera_release;
+    camera_ops->dump = camera_dump;
+
+    *device = &camera_device->base.common;
+    return 0;
+}
+
 static int camera_device_open(const hw_module_t *module, const char *name,
         hw_device_t **device)
 {
     int rv = 0;
     int num_cameras = 0;
     int cameraid;
-    wrapper_camera_device_t *camera_device = NULL;
-    camera_device_ops_t *camera_ops = NULL;
+    hw_device_t *vendor_device = NULL;
 
     android::Mutex::Autolock lock(gCameraWrapperLock);
 
@@ -566,95 +639,33 @@ static int camera_device_open(const hw_module_t *module, const char *name,
         cameraid = atoi(name);
         num_cameras = gVendorModule->get_number_of_cameras();
 
-        fixed_set_params = (char **) malloc(sizeof(char *) * num_cameras);
-        if (!fixed_set_params) {
-            ALOGE("parameter memory allocation fail");
-            rv = -ENOMEM;
-            goto fail;
-        }
-        memset(fixed_set_params, 0, sizeof(char *) * num_cameras);
-
-        if (cameraid > num_cameras) {
+        if (cameraid < 0 || cameraid >= num_cameras) {
             ALOGE("camera service provided cameraid out of bounds, "
                     "cameraid = %d, num supported = %d",
                     cameraid, num_cameras);
-            rv = -EINVAL;
-            goto fail;
+            return -EINVAL;
         }
-
-        camera_device = (wrapper_camera_device_t*)malloc(sizeof(*camera_device));
-        if (!camera_device) {
-            ALOGE("camera_device allocation fail");
-            rv = -ENOMEM;
-            goto fail;
-        }
-        memset(camera_device, 0, sizeof(*camera_device));
-        camera_device->id = cameraid;
 
         rv = gVendorModule->common.methods->open(
                 (const hw_module_t*)gVendorModule, name,
-                (hw_device_t**)&(camera_device->vendor));
+                &vendor_device);
         if (rv) {
             ALOGE("vendor camera open fail");
-            goto fail;
+            return rv;
         }
-        ALOGV("%s: got vendor camera device 0x%08X",
-                __FUNCTION__, (uintptr_t)(camera_device->vendor));
+        ALOGI("opened vendor camera %d with device API %x", cameraid,
+                vendor_device->version);
 
-        camera_ops = (camera_device_ops_t*)malloc(sizeof(*camera_ops));
-        if (!camera_ops) {
-            ALOGE("camera_ops allocation fail");
-            rv = -ENOMEM;
-            goto fail;
+        if (vendor_device->version >= CAMERA_DEVICE_API_VERSION_3_0) {
+            *device = vendor_device;
+            return 0;
         }
 
-        memset(camera_ops, 0, sizeof(*camera_ops));
-
-        camera_device->base.common.tag = HARDWARE_DEVICE_TAG;
-        camera_device->base.common.version = CAMERA_DEVICE_API_VERSION_1_0;
-        camera_device->base.common.module = (hw_module_t *)(module);
-        camera_device->base.common.close = camera_device_close;
-        camera_device->base.ops = camera_ops;
-
-        camera_ops->set_preview_window = camera_set_preview_window;
-        camera_ops->set_callbacks = camera_set_callbacks;
-        camera_ops->enable_msg_type = camera_enable_msg_type;
-        camera_ops->disable_msg_type = camera_disable_msg_type;
-        camera_ops->msg_type_enabled = camera_msg_type_enabled;
-        camera_ops->start_preview = camera_start_preview;
-        camera_ops->stop_preview = camera_stop_preview;
-        camera_ops->preview_enabled = camera_preview_enabled;
-        camera_ops->store_meta_data_in_buffers = camera_store_meta_data_in_buffers;
-        camera_ops->start_recording = camera_start_recording;
-        camera_ops->stop_recording = camera_stop_recording;
-        camera_ops->recording_enabled = camera_recording_enabled;
-        camera_ops->release_recording_frame = camera_release_recording_frame;
-        camera_ops->auto_focus = camera_auto_focus;
-        camera_ops->cancel_auto_focus = camera_cancel_auto_focus;
-        camera_ops->take_picture = camera_take_picture;
-        camera_ops->cancel_picture = camera_cancel_picture;
-        camera_ops->set_parameters = camera_set_parameters;
-        camera_ops->get_parameters = camera_get_parameters;
-        camera_ops->put_parameters = camera_put_parameters;
-        camera_ops->send_command = camera_send_command;
-        camera_ops->release = camera_release;
-        camera_ops->dump = camera_dump;
-
-        *device = &camera_device->base.common;
+        rv = wrap_camera1_device(module, cameraid, vendor_device, device);
+        if (rv)
+            vendor_device->close(vendor_device);
     }
 
-    return rv;
-
-fail:
-    if (camera_device) {
-        free(camera_device);
-        camera_device = NULL;
-    }
-    if (camera_ops) {
-        free(camera_ops);
-        camera_ops = NULL;
-    }
-    *device = NULL;
     return rv;
 }
 
@@ -670,6 +681,128 @@ static int camera_get_camera_info(int camera_id, struct camera_info *info)
 {
     ALOGV("%s", __FUNCTION__);
     if (check_vendor_module())
+        return -ENODEV;
+
+    int rv = gVendorModule->get_camera_info(camera_id, info);
+    if (rv || info->device_version < CAMERA_DEVICE_API_VERSION_3_0 ||
+            !info->static_camera_characteristics)
+        return rv;
+
+    android::Mutex::Autolock lock(gCameraMetadataLock);
+    int num_cameras = gVendorModule->get_number_of_cameras();
+    if (camera_id < 0 || camera_id >= num_cameras)
+        return -EINVAL;
+
+    if (!gFixedCameraMetadata) {
+        gFixedCameraMetadata = (camera_metadata_t **)calloc(num_cameras,
+                sizeof(camera_metadata_t *));
+        if (!gFixedCameraMetadata)
+            return -ENOMEM;
+    }
+
+    if (!gFixedCameraMetadata[camera_id]) {
+        camera_metadata_t *metadata =
+                clone_camera_metadata(info->static_camera_characteristics);
+        if (!metadata)
+            return -ENOMEM;
+
+        camera_metadata_entry_t entry;
+        int32_t orientation = info->orientation;
+        // Match the known-good HAL1 mount angles reported by libra's vendor HAL.
+        if (camera_id == 0)
+            orientation = 90;
+        else if (camera_id == 1)
+            orientation = 270;
+
+        int find_rv = find_camera_metadata_entry(metadata,
+                ANDROID_SENSOR_ORIENTATION, &entry);
+        if (!find_rv) {
+            int32_t vendor_orientation = entry.data.i32[0];
+            int update_rv = update_camera_metadata_entry(metadata, entry.index,
+                    &orientation, 1, NULL);
+            if (update_rv) {
+                ALOGE("failed to update HAL3 orientation for camera %d: %d",
+                        camera_id, update_rv);
+                free_camera_metadata(metadata);
+                return update_rv;
+            }
+            ALOGI("camera %d HAL3 orientation: vendor=%d fixed=%d",
+                    camera_id, vendor_orientation, orientation);
+        } else {
+            ALOGE("HAL3 sensor orientation missing for camera %d", camera_id);
+            free_camera_metadata(metadata);
+            return find_rv;
+        }
+
+        gFixedCameraMetadata[camera_id] = metadata;
+    }
+
+    info->static_camera_characteristics = gFixedCameraMetadata[camera_id];
+    info->orientation = camera_id == 0 ? 90 :
+            camera_id == 1 ? 270 : info->orientation;
+    return 0;
+}
+
+static int camera_set_module_callbacks(const camera_module_callbacks_t *callbacks)
+{
+    if (check_vendor_module())
+        return -ENODEV;
+    if (!gVendorModule->set_callbacks)
         return 0;
-    return gVendorModule->get_camera_info(camera_id, info);
+    return gVendorModule->set_callbacks(callbacks);
+}
+
+static void camera_get_vendor_tag_ops(vendor_tag_ops_t *ops)
+{
+    if (!check_vendor_module() && gVendorModule->get_vendor_tag_ops)
+        gVendorModule->get_vendor_tag_ops(ops);
+}
+
+static int camera_open_legacy(const hw_module_t *module, const char *id,
+        uint32_t hal_version, hw_device_t **device)
+{
+    android::Mutex::Autolock lock(gCameraWrapperLock);
+    if (check_vendor_module())
+        return -ENODEV;
+    if (!gVendorModule->open_legacy)
+        return -ENOSYS;
+
+    int camera_id = atoi(id);
+    int num_cameras = gVendorModule->get_number_of_cameras();
+    if (camera_id < 0 || camera_id >= num_cameras)
+        return -EINVAL;
+
+    hw_device_t *vendor_device = NULL;
+    int rv = gVendorModule->open_legacy(&gVendorModule->common, id,
+            hal_version, &vendor_device);
+    if (rv)
+        return rv;
+
+    if (vendor_device->version > CAMERA_DEVICE_API_VERSION_1_0) {
+        *device = vendor_device;
+        return 0;
+    }
+
+    rv = wrap_camera1_device(module, camera_id, vendor_device, device);
+    if (rv)
+        vendor_device->close(vendor_device);
+    return rv;
+}
+
+static int camera_set_torch_mode(const char *camera_id, bool enabled)
+{
+    if (check_vendor_module())
+        return -ENODEV;
+    if (!gVendorModule->set_torch_mode)
+        return -ENOSYS;
+    return gVendorModule->set_torch_mode(camera_id, enabled);
+}
+
+static int camera_module_init(void)
+{
+    if (check_vendor_module())
+        return -ENODEV;
+    if (!gVendorModule->init)
+        return 0;
+    return gVendorModule->init();
 }
