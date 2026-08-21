@@ -251,7 +251,7 @@
                 <route type="mix" sink="Telephony Tx"
                        sources="voice_tx"/>
                 <route type="mix" sink="primary input"
-                       sources="Wired Headset Mic,BT SCO Headset Mic,Telephony Rx"/>
+                       sources="Built-In Mic,Built-In Back Mic,Wired Headset Mic,BT SCO Headset Mic,Telephony Rx"/>
                 <route type="mix" sink="surround_sound"
                        sources="Built-In Mic,Built-In Back Mic,Telephony Rx"/>
                 <route type="mix" sink="Telephony Tx"
