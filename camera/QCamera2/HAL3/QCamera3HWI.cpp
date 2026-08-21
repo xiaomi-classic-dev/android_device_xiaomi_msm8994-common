@@ -5267,6 +5267,12 @@ int QCamera3HardwareInterface::initStaticMetadata(uint32_t cameraId)
                       1);
 
     int32_t sensor_orientation = (int32_t)gCamCapability[cameraId]->sensor_mount_angle;
+    /* Match the mount angles exposed by Xiaomi's vendor HAL. */
+    if (cameraId == 0) {
+        sensor_orientation = 90;
+    } else if (cameraId == 1) {
+        sensor_orientation = 270;
+    }
     staticInfo.update(ANDROID_SENSOR_ORIENTATION,
                       &sensor_orientation,
                       1);
@@ -5921,6 +5927,11 @@ int QCamera3HardwareInterface::getCamInfo(uint32_t cameraId,
 
 
     info->orientation = (int)gCamCapability[cameraId]->sensor_mount_angle;
+    if (cameraId == 0) {
+        info->orientation = 90;
+    } else if (cameraId == 1) {
+        info->orientation = 270;
+    }
     info->device_version = CAMERA_DEVICE_API_VERSION_3_2;
     info->static_camera_characteristics = gStaticMetadata[cameraId];
 

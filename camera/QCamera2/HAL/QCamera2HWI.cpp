@@ -1496,6 +1496,12 @@ int QCamera2HardwareInterface::getCapabilities(uint32_t cameraId,
     p_info->device_version = CAMERA_DEVICE_API_VERSION_1_0;
     p_info->static_camera_characteristics = NULL;
     memcpy(info, p_info, sizeof (struct camera_info));
+    /* Match the mount angles exposed by Xiaomi's vendor HAL. */
+    if (cameraId == 0) {
+        info->orientation = 90;
+    } else if (cameraId == 1) {
+        info->orientation = 270;
+    }
     pthread_mutex_unlock(&g_camlock);
     return rc;
 }
