@@ -6,6 +6,7 @@ include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := \
         util/QCameraCmdThread.cpp \
+        util/QCameraFlash.cpp \
         util/QCameraQueue.cpp \
         QCamera2Hal.cpp \
         QCamera2Factory.cpp
@@ -35,9 +36,10 @@ LOCAL_SRC_FILES += \
 LOCAL_CFLAGS := -Wall -Wextra -Werror
 LOCAL_CFLAGS += -DHAS_MULTIMEDIA_HINTS
 
-ifeq ($(TARGET_USES_AOSP),true)
+# Android 12 removed the Qualcomm-only camera1 command and face-metadata ABI
+# from system/camera.h.  Use the HAL's standard camera1 path instead of writing
+# the removed extended camera_face_t fields past the framework structure.
 LOCAL_CFLAGS += -DVANILLA_HAL
-endif
 
 #use media extension
 ifeq ($(TARGET_USES_MEDIA_EXTENSIONS), true)

@@ -15,6 +15,9 @@
 <!-- Camera app resources that may need to be customized
      for different hardware or product builds. -->
 <resources>
+    <!-- Use Snap's Camera2 implementation with the vendor HAL3 camera device. -->
+    <bool name="support_camera_api_v2">true</bool>
+
     <!-- Opens back camera using openLegacy() -->
     <bool name="back_camera_open_legacy">false</bool>
 

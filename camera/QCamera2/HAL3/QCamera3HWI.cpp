@@ -49,6 +49,7 @@
 #include "QCamera3Channel.h"
 #include "QCamera3PostProc.h"
 #include "QCamera3VendorTags.h"
+#include "util/QCameraFlash.h"
 #include <cutils/properties.h>
 
 using namespace android;
@@ -589,9 +590,15 @@ int QCamera3HardwareInterface::openCamera()
         ALOGE("Failure: Camera already opened");
         return ALREADY_EXISTS;
     }
+    rc = QCameraFlash::getInstance().reserveFlashForCamera(mCameraId);
+    if (rc != NO_ERROR) {
+        ALOGE("Failed to reserve flash for camera %u: %d", mCameraId, rc);
+        return rc;
+    }
     rc = camera_open((uint8_t)mCameraId, &mCameraHandle);
     if (rc) {
         ALOGE("camera_open failed. rc = %d, mCameraHandle = %p", rc, mCameraHandle);
+        QCameraFlash::getInstance().releaseFlashFromCamera(mCameraId);
         return rc;
     }
 
@@ -628,6 +635,11 @@ int QCamera3HardwareInterface::closeCamera()
     rc = mCameraHandle->ops->close_camera(mCameraHandle->camera_handle);
     mCameraHandle = NULL;
     mCameraOpened = false;
+
+    int flashRc = QCameraFlash::getInstance().releaseFlashFromCamera(mCameraId);
+    if (flashRc != NO_ERROR) {
+        ALOGW("Failed to release flash for camera %u: %d", mCameraId, flashRc);
+    }
 
     return rc;
 }
@@ -5005,6 +5017,31 @@ int QCamera3HardwareInterface::initStaticMetadata(uint32_t cameraId)
                 idx+=4;
             }
             break;
+        case HAL_PIXEL_FORMAT_IMPLEMENTATION_DEFINED:
+            for (size_t i = 0; i < gCamCapability[cameraId]->picture_sizes_tbl_cnt; i++) {
+                int32_t width = gCamCapability[cameraId]->picture_sizes_tbl[i].width;
+                int32_t height = gCamCapability[cameraId]->picture_sizes_tbl[i].height;
+                int64_t duration = gCamCapability[cameraId]->picture_min_duration[i];
+
+                /*
+                 * The msm8994 daemon reports the still-processing duration
+                 * (27 fps) for every format at 3840x2160. Android 12 uses
+                 * this value to filter Camera1 recording sizes below
+                 * 29.97 fps, even though the HAL and Venus have a dedicated
+                 * 4K video path. Advertise that path at its profile rate.
+                 */
+                if (cameraId == 0 && width == VIDEO_4K_WIDTH &&
+                        height == VIDEO_4K_HEIGHT) {
+                    duration = 1000000000LL / 30;
+                }
+
+                available_min_durations[idx] = scalar_formats[j];
+                available_min_durations[idx+1] = width;
+                available_min_durations[idx+2] = height;
+                available_min_durations[idx+3] = duration;
+                idx += 4;
+            }
+            break;
         default:
             for (size_t i = 0; i < gCamCapability[cameraId]->picture_sizes_tbl_cnt; i++) {
                 available_min_durations[idx] = scalar_formats[j];
@@ -5938,6 +5975,22 @@ int QCamera3HardwareInterface::getCamInfo(uint32_t cameraId,
     pthread_mutex_unlock(&gCamLock);
 
     return rc;
+}
+
+/*===========================================================================
+ * FUNCTION   : hasFlashUnit
+ *==========================================================================*/
+bool QCamera3HardwareInterface::hasFlashUnit(uint32_t cameraId)
+{
+    if (cameraId >= MM_CAMERA_MAX_NUM_SENSORS) {
+        return false;
+    }
+
+    pthread_mutex_lock(&gCamLock);
+    bool hasFlash = gCamCapability[cameraId] != NULL &&
+            gCamCapability[cameraId]->flash_available;
+    pthread_mutex_unlock(&gCamLock);
+    return hasFlash;
 }
 
 /*===========================================================================

@@ -4031,6 +4031,9 @@ int QCamera2HardwareInterface::sendCommand(int32_t command,
         int32_t &arg1, int32_t &/*arg2*/)
 {
     int rc = NO_ERROR;
+#ifdef VANILLA_HAL
+    (void)arg1;
+#endif
 
     switch (command) {
 #ifndef VANILLA_HAL
@@ -4728,6 +4731,9 @@ int32_t QCamera2HardwareInterface::processRetroAECUnlock()
 int32_t QCamera2HardwareInterface::processHDRData(cam_asd_hdr_scene_data_t hdr_scene)
 {
     int rc = NO_ERROR;
+#ifdef VANILLA_HAL
+    (void)hdr_scene;
+#endif
 
 #ifndef VANILLA_HAL
     if (hdr_scene.is_hdr_scene &&
@@ -6639,6 +6645,9 @@ void QCamera2HardwareInterface::returnStreamBuffer(void *data,
  *==========================================================================*/
 int32_t QCamera2HardwareInterface::processHistogramStats(cam_hist_stats_t &stats_data)
 {
+#ifdef VANILLA_HAL
+    (void)stats_data;
+#endif
 #ifndef VANILLA_HAL
     if (!mParameters.isHistogramEnabled()) {
         CDBG_HIGH("%s: Histogram not enabled, no ops here", __func__);

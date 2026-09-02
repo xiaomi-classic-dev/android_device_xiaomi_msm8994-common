@@ -31,6 +31,7 @@
 //#define LOG_NDEBUG 0
 
 #include <stdlib.h>
+#include <errno.h>
 #include <utils/Log.h>
 #include <utils/Errors.h>
 #include <hardware/camera.h>
@@ -39,6 +40,7 @@
 #include "HAL/QCamera2HWI.h"
 #include "HAL3/QCamera3HWI.h"
 #include "QCamera2Factory.h"
+#include "util/QCameraFlash.h"
 
 using namespace android;
 
@@ -163,6 +165,14 @@ int QCamera2Factory::set_callbacks(const camera_module_callbacks_t *callbacks)
 }
 
 /*===========================================================================
+ * FUNCTION   : set_torch_mode
+ *==========================================================================*/
+int QCamera2Factory::set_torch_mode(const char *camera_id, bool on)
+{
+    return gQCamera2Factory->setTorchMode(camera_id, on);
+}
+
+/*===========================================================================
  * FUNCTION   : open_legacy
  *
  * DESCRIPTION: Function to open older hal version implementation
@@ -263,9 +273,29 @@ int QCamera2Factory::getCameraInfo(int camera_id, struct camera_info *info)
  *==========================================================================*/
 int QCamera2Factory::setCallbacks(const camera_module_callbacks_t *callbacks)
 {
-    int rc = NO_ERROR;
     mCallbacks = callbacks;
-    return rc;
+    return QCameraFlash::getInstance().registerCallbacks(callbacks);
+}
+
+/*===========================================================================
+ * FUNCTION   : setTorchMode
+ *==========================================================================*/
+int QCamera2Factory::setTorchMode(const char *camera_id, bool on)
+{
+    if (camera_id == NULL) {
+        return BAD_VALUE;
+    }
+
+    char *end = NULL;
+    errno = 0;
+    long id = strtol(camera_id, &end, 10);
+    if (errno == ERANGE || end == camera_id || *end != '\0' ||
+            id < 0 || id >= getNumberOfCameras()) {
+        return BAD_VALUE;
+    }
+
+    return QCameraFlash::getInstance().setTorchMode(
+            static_cast<int>(id), on);
 }
 
 /*===========================================================================

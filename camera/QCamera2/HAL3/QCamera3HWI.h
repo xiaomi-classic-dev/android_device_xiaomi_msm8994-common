@@ -130,6 +130,7 @@ public:
     camera_metadata_t* translateCapabilityToMetadata(int type);
 
     static int getCamInfo(uint32_t cameraId, struct camera_info *info);
+    static bool hasFlashUnit(uint32_t cameraId);
     static int initCapabilities(uint32_t cameraId);
     static int initStaticMetadata(uint32_t cameraId);
     static void makeTable(cam_dimension_t *dimTable, size_t size,
