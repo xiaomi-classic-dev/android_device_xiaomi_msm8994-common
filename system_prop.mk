@@ -1,6 +1,7 @@
+MSM8994_RIL_SUBSCRIPTION_TYPES ?= NV,RUIM
+
 PRODUCT_PROPERTY_OVERRIDES += \
-    rild.libpath=/vendor/lib64/libril-qc-qmi-1.so \
-    rild.libargs=-d[SPACE]/dev/smd0 \
+    vendor.rild.libpath=/vendor/lib64/libril-qc-qmi-1.so \
     persist.rild.nitz_plmn="" \
     persist.rild.nitz_long_ons_0="" \
     persist.rild.nitz_long_ons_1="" \
@@ -10,16 +11,28 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.rild.nitz_short_ons_1="" \
     persist.rild.nitz_short_ons_2="" \
     persist.rild.nitz_short_ons_3="" \
-    ril.subscription.types=NV,RUIM \
+    ril.subscription.types=$(MSM8994_RIL_SUBSCRIPTION_TYPES) \
     persist.sys.ssr.restart_level=ALL_ENABLE \
     persist.sys.ssr.enable_ramdumps=1 \
-    persist.radio.add_power_save=1 \
+    persist.radio.add_power_save=0 \
     persist.radio.multisim.config=dsds \
-    DEVICE_PROVISIONED=1
+    persist.radio.apm_sim_not_pwdn=1 \
+    persist.radio.sib16_support=1 \
+    persist.radio.sw_mbn_update=1 \
+    persist.radio.rat_on=combine \
+    DEVICE_PROVISIONED=1 \
+    persist.radio.enable_nw_cw=1 \
+    persist.radio.RATE_ADAPT_ENABLE=1 \
+    persist.radio.ROTATION_ENABLE=1 \
+    persist.radio.ue_interrogate=0 \
+    persist.ro.ril.sms_sync_sending=1
 
-# Start in TD-SCDMA, GSM/WCDMA and LTE mode
+MSM8994_DEFAULT_NETWORK ?= 10
+
+# Preferred radio network mode
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.telephony.default_network=10 \
+    ro.telephony.default_network=$(MSM8994_DEFAULT_NETWORK) \
+    ro.telephony.use_old_mnc_mcc_format=true \
     ro.telephony.default_cdma_sub=0
 
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -136,9 +149,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 #
 # System props for telephony
-# System prop to turn on CdmaLTEPhone always
+# The msm8994 DSDS radio is 3GPP-first on Libra.  Advertising it as CDMA-LTE
+# makes Telephony issue CDMA-only requests and can tear down the LTE attach.
 PRODUCT_PROPERTY_OVERRIDES += \
-    telephony.lteOnCdmaDevice=1
+    telephony.lteOnGsmDevice=1
 
 #
 # System props for bluetooth
