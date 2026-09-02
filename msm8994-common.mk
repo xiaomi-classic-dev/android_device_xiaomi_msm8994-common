@@ -176,8 +176,8 @@ PRODUCT_PACKAGES += \
     camera.$(BOARD_PLATFORM) \
     camera.device@1.0-impl \
     android.hardware.camera.provider@2.4-impl \
+    android.hardware.camera.provider@2.4-service \
     libshim_atomic \
-    libshim_camera \
     Snap
 
 # Keystore
@@ -194,6 +194,7 @@ PRODUCT_PACKAGES += \
 
 # LiveDisplay
 PRODUCT_PACKAGES += \
+    libshim_powermanager \
     vendor.lineage.livedisplay@2.0-service-legacymm
 
 # OMX

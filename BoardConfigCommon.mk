@@ -1,4 +1,7 @@
 BUILD_BROKEN_USES_BUILD_COPY_HEADERS := true
+# The stock msm8994 blob list predates Android 12's requirement that every
+# copied ELF be modeled as a Soong/Make module. Keep the legacy vendor paths.
+BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 
 BOARD_VENDOR := xiaomi
 
@@ -91,6 +94,7 @@ USE_REDUCED_CJK_FONT_WEIGHTS := true
 
 # Kernel
 TARGET_KERNEL_SOURCE := kernel/xiaomi/leo
+TARGET_KERNEL_CLANG_COMPILE := false
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 boot_cpus=0-5 loop.max_part=7 androidboot.selinux=permissive
 BOARD_KERNEL_BASE        := 0x00000000
 BOARD_KERNEL_PAGESIZE    := 4096
@@ -213,7 +217,14 @@ include device/qcom/sepolicy-legacy/sepolicy.mk
 BOARD_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy
 
 # Shims
-TARGET_LD_SHIM_LIBS += /system/vendor/lib64/libril-qc-qmi-1.so|rild_socket.so:/system/vendor/lib/libmmcamera2_stats_algorithm.so|libshim_atomic.so:/system/vendor/lib64/libizat_core.so|libshims_get_process_name.so:/system/vendor/lib64/libril-qc-qmi-1.so|libaudioclient_shim.so
+TARGET_LD_SHIM_LIBS += \
+    /system/vendor/lib/libmm-abl.so|libshim_powermanager.so \
+    /system/vendor/lib/libmmcamera2_stats_algorithm.so|libshim_atomic.so \
+    /system/vendor/lib64/libizat_core.so|libshims_get_process_name.so \
+    /system/vendor/lib64/libmm-abl.so|libshim_powermanager.so \
+    /system/vendor/lib64/libmm-qdcm-diag.so|libshim_powermanager.so \
+    /system/vendor/lib64/libril-qc-qmi-1.so|libaudioclient_shim.so \
+    /system/vendor/lib64/libril-qc-qmi-1.so|rild_socket.so
 
 # TWRP Support
 ifeq ($(WITH_TWRP),true)
