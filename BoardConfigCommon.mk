@@ -38,6 +38,7 @@ TARGET_USES_GRALLOC1_ADAPTER := true
 TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
 MAX_VIRTUAL_DISPLAY_DIMENSION := 2048
 TARGET_USES_HWC2 := true
+TARGET_DISABLE_POSTRENDER_CLEANUP := true
 
 MAX_EGL_CACHE_KEY_SIZE := 12*1024
 MAX_EGL_CACHE_SIZE := 2048*1024
@@ -95,6 +96,9 @@ USE_REDUCED_CJK_FONT_WEIGHTS := true
 # Kernel
 TARGET_KERNEL_SOURCE := kernel/xiaomi/leo
 TARGET_KERNEL_CLANG_COMPILE := false
+TARGET_KERNEL_ADDITIONAL_FLAGS += HOSTCC="$(TARGET_KERNEL_CLANG_PATH)/bin/clang -B/usr/bin"
+TARGET_KERNEL_ADDITIONAL_FLAGS += HOSTCXX="$(TARGET_KERNEL_CLANG_PATH)/bin/clang++ -B/usr/bin"
+TARGET_KERNEL_ADDITIONAL_FLAGS += HOSTLDFLAGS="-L/usr/lib/x86_64-linux-gnu -L/usr/lib64"
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 boot_cpus=0-5 loop.max_part=7 androidboot.selinux=permissive
 BOARD_KERNEL_BASE        := 0x00000000
 BOARD_KERNEL_PAGESIZE    := 4096
@@ -198,6 +202,7 @@ WIFI_DRIVER_FW_PATH_AP          := "ap"
 WIFI_DRIVER_FW_PATH_STA         := "sta"
 WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
 TARGET_USES_QCOM_WCNSS_QMI      := true
+TARGET_PROVIDES_WCNSS_QMI       := true
 WPA_SUPPLICANT_VERSION          := VER_0_8_X
 
 # Recovery

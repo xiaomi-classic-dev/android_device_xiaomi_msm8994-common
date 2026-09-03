@@ -41,6 +41,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     debug.sf.latch_unsignaled=1 \
     debug.sf.disable_backpressure=1 \
     debug.sf.enable_gl_backpressure=1 \
+    debug.renderengine.backend=threaded \
     debug.composition.type=c2d \
     persist.hwc.mdpcomp.enable=true \
     persist.mdpcomp.4k2kSplit=1 \
@@ -77,6 +78,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.dpm.feature=0
 
 PRODUCT_PROPERTY_OVERRIDES += \
+    debug.stagefright.ccodec=0 \
     debug.stagefright.omx_default_rank.sw-audio=1 \
     debug.stagefright.omx_default_rank=0 \
     media.stagefright.enable-player=true \

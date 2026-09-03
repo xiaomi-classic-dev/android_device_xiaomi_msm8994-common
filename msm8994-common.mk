@@ -90,13 +90,17 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/ld.config.txt:system/etc/swcodec/ld.config.txt
 
+# Legacy controller and task-profile layout
+PRODUCT_COPY_FILES += \
+    system/core/libprocessgroup/profiles/cgroups_28.json:$(TARGET_COPY_OUT_VENDOR)/etc/cgroups.json \
+    system/core/libprocessgroup/profiles/task_profiles_28.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
+
 # Audio
 PRODUCT_PACKAGES += \
     android.hardware.audio.service \
-    android.hardware.audio@2.0-impl \
-    android.hardware.audio.effect@2.0-impl \
+    android.hardware.audio@4.0-impl \
+    android.hardware.audio.effect@4.0-impl \
     android.hardware.soundtrigger@2.0-impl \
-    audio.a2dp.default \
     audio.primary.$(BOARD_PLATFORM) \
     audio.r_submix.default \
     audio.usb.default \
@@ -116,7 +120,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     cneapiclient \
     com.quicinc.cne \
-    libcnefeatureconfig \
     services-ext
 
 # Dummy hidl lib for oreo blobs
@@ -135,9 +138,9 @@ PRODUCT_PACKAGES += \
     sap.conf \
     xtwifi.conf
     
-# Gatekeeper HAL
+# Gatekeeper
 PRODUCT_PACKAGES += \
-    android.hardware.gatekeeper@1.0-impl
+    android.hardware.gatekeeper@1.0-service.software
 
 # GNSS HAL
 PRODUCT_PACKAGES += \
@@ -166,11 +169,6 @@ PRODUCT_PACKAGES += \
     android.hardware.health@2.1-impl.recovery \
     android.hardware.health@2.1-service
 
-# IPv6
-PRODUCT_PACKAGES += \
-    ebtables \
-    ethertypes
-
 # Camera
 PRODUCT_PACKAGES += \
     camera.$(BOARD_PLATFORM) \
@@ -178,7 +176,7 @@ PRODUCT_PACKAGES += \
     android.hardware.camera.provider@2.4-impl \
     android.hardware.camera.provider@2.4-service \
     libshim_atomic \
-    Snap
+    Camera2
 
 # Keystore
 PRODUCT_PACKAGES += \
@@ -202,7 +200,6 @@ PRODUCT_PACKAGES += \
     android.hardware.drm@1.0-impl \
     android.hardware.drm@1.0-service \
     libc2dcolorconvert \
-    libdivxdrmdecrypt \
     libdrmclearkeyplugin \
     libmm-omxcore \
     libOmxAacEnc \
@@ -229,6 +226,7 @@ PRODUCT_PACKAGES += \
 
 # RIL
 PRODUCT_PACKAGES += \
+    android.hardware.radio.config@1.0-service \
     libaudioclient_shim \
     librmnetctl \
     rild_socket \
@@ -285,8 +283,6 @@ PRODUCT_PACKAGES += \
     ipacm \
     ipacm-diag \
     IPACM_cfg.xml \
-    libqsap_sdk \
-    libQWiFiSoftApCfg \
     libwpa_client \
     hostapd \
     dhcpcd.conf \
