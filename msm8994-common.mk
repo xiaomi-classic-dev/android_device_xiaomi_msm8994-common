@@ -116,12 +116,6 @@ PRODUCT_PACKAGES += \
     libbt-vendor \
     android.hardware.bluetooth@1.0-impl
 
-# Connectivity Engine support (CNE)
-PRODUCT_PACKAGES += \
-    cneapiclient \
-    com.quicinc.cne \
-    services-ext
-
 # Dummy hidl lib for oreo blobs
 PRODUCT_PACKAGES += \
     libhidltransport \
@@ -134,7 +128,6 @@ PRODUCT_PACKAGES += \
     gps.conf \
     izat.conf \
     lowi.conf \
-    quipc.conf \
     sap.conf \
     xtwifi.conf
     
@@ -155,7 +148,6 @@ PRODUCT_PACKAGES += \
     memtrack.$(BOARD_PLATFORM) \
     liboverlay \
     libtinyxml \
-    libgenlock \
     android.hardware.configstore@1.1-service \
     android.hardware.graphics.allocator@2.0-impl \
     android.hardware.graphics.allocator@2.0-service \
@@ -208,7 +200,6 @@ PRODUCT_PACKAGES += \
     libOmxEvrcEnc \
     libOmxQcelp13Enc \
     libOmxVdec \
-    libOmxVdecHevc \
     libOmxVenc \
     libstagefrighthw
 
@@ -249,16 +240,10 @@ PRODUCT_COPY_FILES += \
 
 # Telephony
 PRODUCT_PACKAGES += \
-    qti-telephony-common \
     telephony-ext
 
 PRODUCT_BOOT_JARS += \
     telephony-ext
-
-# TimeKeep
-PRODUCT_PACKAGES += \
-    timekeep \
-    TimeKeep
 
 # Trust HAL
 PRODUCT_PACKAGES += \
@@ -281,11 +266,9 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service \
     ipacm \
-    ipacm-diag \
     IPACM_cfg.xml \
     libwpa_client \
     hostapd \
-    dhcpcd.conf \
     readmac \
     wificond \
     wpa_supplicant \
