@@ -7115,11 +7115,11 @@ bool QCamera2HardwareInterface::needReprocess()
         return true;
     }
 
-    if (mParameters.isUbiFocusEnabled() |
-            mParameters.isUbiRefocus() |
-            mParameters.isChromaFlashEnabled() |
-            mParameters.isHDREnabled() |
-            mParameters.isOptiZoomEnabled() |
+    if (mParameters.isUbiFocusEnabled() ||
+            mParameters.isUbiRefocus() ||
+            mParameters.isChromaFlashEnabled() ||
+            mParameters.isHDREnabled() ||
+            mParameters.isOptiZoomEnabled() ||
             mParameters.isStillMoreEnabled()) {
         CDBG_HIGH("%s: need reprocess for |UbiFocus=%d|ChramaFlash=%d|OptiZoom=%d|StillMore=%d|",
                  __func__,
