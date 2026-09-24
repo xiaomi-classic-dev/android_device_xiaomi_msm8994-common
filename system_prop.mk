@@ -29,6 +29,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 MSM8994_DEFAULT_NETWORK ?= 10
 
+# Enable the Qualcomm IMS stack and expose VoLTE/VT to telephony.
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.dbg.ims_volte_enable=1 \
+    persist.dbg.volte_avail_ovr=1 \
+    persist.dbg.vt_avail_ovr=1
+
 # Preferred radio network mode
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.telephony.default_network=$(MSM8994_DEFAULT_NETWORK) \

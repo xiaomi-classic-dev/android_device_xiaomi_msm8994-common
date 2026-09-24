@@ -53,6 +53,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.camera.raw.xml:system/vendor/etc/permissions/android.hardware.camera.raw.xml\
     frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/vendor/etc/permissions/android.hardware.telephony.gsm.xml \
     frameworks/native/data/etc/android.hardware.telephony.cdma.xml:system/vendor/etc/permissions/android.hardware.telephony.cdma.xml \
+    frameworks/native/data/etc/android.hardware.telephony.ims.xml:system/vendor/etc/permissions/android.hardware.telephony.ims.xml \
     frameworks/native/data/etc/android.hardware.location.gps.xml:system/vendor/etc/permissions/android.hardware.location.gps.xml \
     frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:system/vendor/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml \
     frameworks/native/data/etc/android.hardware.wifi.xml:system/vendor/etc/permissions/android.hardware.wifi.xml \
@@ -113,6 +114,12 @@ PRODUCT_PACKAGES += \
 
 # Dummy hidl lib for oreo blobs
 PRODUCT_PACKAGES += \
+    android.hidl.base@1.0 \
+    android.hidl.manager@1.0 \
+    hidl_base_compat_msm8994 \
+    hidl_base_compat_msm8994_vendor \
+    hidl_manager_compat_msm8994 \
+    hidl_manager_compat_msm8994_vendor \
     libhidltransport \
     libhwbinder
 
@@ -214,6 +221,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.radio.config@1.0-service \
     libaudioclient_shim \
+    libbase_shim \
+    libandroid_net \
+    libjson \
+    libui_shim \
     librmnetctl \
     rild_socket \
     libxml2
@@ -235,7 +246,19 @@ PRODUCT_COPY_FILES += \
 
 # Telephony
 PRODUCT_PACKAGES += \
+    libqdMetaData_msm8994 \
+    vendor.qti.hardware.camera.device@1.0 \
+    ims-ext-common \
+    ims_ext_common.xml \
+    qti-telephony-hidl-wrapper \
+    qti_telephony_hidl_wrapper.xml \
+    qti-telephony-common \
+    qti-telephony-utils \
+    qti_telephony_utils.xml \
     telephony-ext
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/qti_whitelist.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/sysconfig/qti_whitelist.xml
 
 PRODUCT_BOOT_JARS += \
     telephony-ext
