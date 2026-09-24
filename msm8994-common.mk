@@ -246,13 +246,12 @@ PRODUCT_COPY_FILES += \
 
 # Telephony
 PRODUCT_PACKAGES += \
-    libqdMetaData_msm8994 \
+    libqdMetaData \
     vendor.qti.hardware.camera.device@1.0 \
     ims-ext-common \
     ims_ext_common.xml \
     qti-telephony-hidl-wrapper \
     qti_telephony_hidl_wrapper.xml \
-    qti-telephony-common \
     qti-telephony-utils \
     qti_telephony_utils.xml \
     telephony-ext
