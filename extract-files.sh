@@ -21,6 +21,23 @@ if [ ! -f "${HELPER}" ]; then
 fi
 source "${HELPER}"
 
+function blob_fixup() {
+    case "${1}" in
+        product/lib64/lib-imsvideocodec.so)
+            if ! "${PATCHELF}" --print-needed "${2}" | grep -q '^libui_shim.so$'; then
+                "${PATCHELF}" --add-needed libui_shim.so "${2}"
+            fi
+            ;;
+        vendor/etc/init/ims_rtp_daemon.rc|vendor/etc/init/imsdatadaemon.rc|vendor/etc/init/imsqmidaemon.rc|vendor/etc/init/imsrcsd.rc)
+            sed -i 's/vendor_qti_diag/diag/g' "${2}"
+            if [[ "${1}" == "vendor/etc/init/ims_rtp_daemon.rc" || "${1}" == "vendor/etc/init/imsdatadaemon.rc" ]]; then
+                sed -i '/^[[:space:]]*group radio diag inet log$/a\    capabilities NET_RAW' "${2}"
+                sed -i '/^[[:space:]]*group radio wifi inet diag log$/a\    capabilities NET_RAW' "${2}"
+            fi
+            ;;
+    esac
+}
+
 # Default to sanitizing the vendor folder before extraction
 CLEAN_VENDOR=true
 
@@ -85,4 +102,4 @@ if [ -z "${ONLY_COMMON}" ] && [ -z "${ONLY_DEVICE_COMMON}" ] && [ -s "${MY_DIR}/
     extract "${MY_DIR}/../${DEVICE}/proprietary-files.txt" "${SRC}" "${KANG}" --section "${SECTION}"
 fi
 
-"${MY_DIR}/setup-makefiles.sh
+"${MY_DIR}/setup-makefiles.sh"

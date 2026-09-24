@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <allow-in-power-save package="org.codeaurora.ims" />
+    <allow-in-power-save package="com.qualcomm.qcrilmsgtunnel" />
+    <hidden-api-whitelisted-app package="org.codeaurora.ims" />
+    <hidden-api-whitelisted-app package="com.qualcomm.qcrilmsgtunnel" />
+</config>

@@ -17,6 +17,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.multisim.config=dsds \
     DEVICE_PROVISIONED=1
 
+# Enable the Qualcomm IMS stack and expose VoLTE/VT to telephony.
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.dbg.ims_volte_enable=1 \
+    persist.dbg.volte_avail_ovr=1 \
+    persist.dbg.vt_avail_ovr=1
+
 # Start in TD-SCDMA, GSM/WCDMA and LTE mode
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.telephony.default_network=10 \

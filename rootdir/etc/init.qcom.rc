@@ -205,6 +205,24 @@ on boot
 
 # msm specific files that need to be created on /data
 on post-fs-data
+    # The kenzo netmgrd writes its log under this directory at startup.
+    mkdir /data/vendor/netmgr 0770 radio radio
+    mkdir /data/vendor/netmgr/recovery 0770 radio radio
+
+    # Match the prebuilt database location expected by the kenzo RIL.
+    mkdir /data/vendor/radio 0770 radio radio
+    copy /vendor/radio/qcril_database/qcril.db /data/vendor/radio/qcril_prebuilt.db
+    chown radio radio /data/vendor/radio/qcril_prebuilt.db
+    chmod 0660 /data/vendor/radio/qcril_prebuilt.db
+    write /data/vendor/radio/prebuilt_db_support 1
+    chown radio radio /data/vendor/radio/prebuilt_db_support
+    chmod 0400 /data/vendor/radio/prebuilt_db_support
+    write /data/vendor/radio/db_check_done 0
+    chown radio radio /data/vendor/radio/db_check_done
+    chmod 0660 /data/vendor/radio/db_check_done
+
+    start vendor.dataadpl
+
     # Create directory for TZ Apps
     mkdir /data/misc/qsee 0770 system system
 

@@ -42,4 +42,7 @@
     <!-- Allows the telephony HFA logic to run even if we're not in setup wizard. -->
     <bool name="config_allow_hfa_outside_of_setup_wizard">false</bool>
 
+    <string name="config_ims_mmtel_package" translatable="false">org.codeaurora.ims</string>
+    <string name="config_ims_rcs_package" translatable="false">org.codeaurora.ims</string>
+
 </resources>
