@@ -12,6 +12,8 @@ LOCAL_SHARED_LIBRARIES := \
     liblog \
     libprocessgroup
 
+LOCAL_HEADER_LIBRARIES := libhardware_headers
+
 LOCAL_SRC_FILES += \
     loc_log.cpp \
     loc_cfg.cpp \

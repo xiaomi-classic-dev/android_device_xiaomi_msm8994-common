@@ -23,6 +23,8 @@ LOCAL_SHARED_LIBRARIES := \
     libgps.utils \
     libdl
 
+LOCAL_HEADER_LIBRARIES := libhardware_headers
+
 LOCAL_SRC_FILES += \
     LocApiBase.cpp \
     LocAdapterBase.cpp \

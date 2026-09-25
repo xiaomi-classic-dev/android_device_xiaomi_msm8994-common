@@ -19,6 +19,8 @@ LOCAL_SHARED_LIBRARIES := \
     libloc_core \
     libgps.utils
 
+LOCAL_HEADER_LIBRARIES := libhardware_headers
+
 LOCAL_SRC_FILES += \
     loc_eng.cpp \
     loc_eng_agps.cpp \
@@ -78,6 +80,8 @@ LOCAL_SHARED_LIBRARIES := \
     libloc_core \
     libgps.utils \
     libdl
+
+LOCAL_HEADER_LIBRARIES := libhardware_headers
 
 ifneq ($(filter $(TARGET_DEVICE), apq8084 msm8960), false)
 endif
