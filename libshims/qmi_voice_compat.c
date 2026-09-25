@@ -1,8 +1,53 @@
 #include <android/log.h>
 #include <dlfcn.h>
+#include <errno.h>
+#include <fcntl.h>
 #include <link.h>
 #include <stdint.h>
 #include <string.h>
+#include <unistd.h>
+
+/* QCRIL first connects to pm-service over /dev/vndbinder. Android 13's
+ * libhardware_legacy then searches for SystemSuspend on the same Binder
+ * driver, although the service is registered on /dev/binder. Use the legacy
+ * kernel wakelock interface here, which this device still exposes to radio. */
+static int write_wakelock(const char *path, const char *id)
+{
+    int fd;
+    size_t length;
+    ssize_t written;
+    int saved_errno;
+
+    if (id == NULL || *id == '\0') {
+        errno = EINVAL;
+        return -1;
+    }
+
+    fd = open(path, O_WRONLY | O_CLOEXEC);
+    if (fd < 0)
+        return -1;
+
+    length = strlen(id);
+    written = write(fd, id, length);
+    saved_errno = errno;
+    close(fd);
+    if (written != (ssize_t)length) {
+        errno = written < 0 ? saved_errno : EIO;
+        return -1;
+    }
+    return 0;
+}
+
+int acquire_wake_lock(int lock, const char *id)
+{
+    (void)lock;
+    return write_wakelock("/sys/power/wake_lock", id);
+}
+
+int release_wake_lock(const char *id)
+{
+    return write_wakelock("/sys/power/wake_unlock", id);
+}
 
 typedef int (*qmi_send_async_fn)(void *, unsigned int, void *, unsigned int,
                                  void *, unsigned int, void *, void *, void *);
