@@ -471,6 +471,11 @@ service cnss-daemon /vendor/bin/cnss-daemon -n -l
     class late_start
     user system
     group system inet net_admin wifi
+    # Keep NET_BIND_SERVICE without a file capability, which sets AT_SECURE
+    # and makes the linker ignore the legacy QMI library path below.
+    capabilities NET_BIND_SERVICE
+    # This blob expects the legacy QMI notifier mutex at offset 56.
+    setenv LD_LIBRARY_PATH /vendor/lib64/gps_legacy:/vendor/lib64
 
 service loc_launcher /vendor/bin/loc_launcher
     #loc_launcher will start as root and set its uid to gps

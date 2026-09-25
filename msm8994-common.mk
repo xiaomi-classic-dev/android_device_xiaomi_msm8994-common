@@ -131,6 +131,14 @@ PRODUCT_PACKAGES += \
     lowi.conf \
     sap.conf \
     xtwifi.conf
+
+# Legacy GNSS/LOWI, CNSS, and thermal blobs require the original msm8994 QMI
+# client ABI. Keep it private to those services; radio uses the newer QMI stack.
+PRODUCT_PACKAGES += lowi-legacy-qmi
+PRODUCT_COPY_FILES += \
+    vendor/xiaomi/msm8994-common/proprietary/vendor/lib64/gps_legacy/libqmi_cci.so:$(TARGET_COPY_OUT_VENDOR)/lib64/gps_legacy/libqmi_cci.so \
+    vendor/xiaomi/msm8994-common/proprietary/vendor/lib64/gps_legacy/libqmi_common_so.so:$(TARGET_COPY_OUT_VENDOR)/lib64/gps_legacy/libqmi_common_so.so \
+    vendor/xiaomi/msm8994-common/proprietary/vendor/lib64/gps_legacy/libqmi_encdec.so:$(TARGET_COPY_OUT_VENDOR)/lib64/gps_legacy/libqmi_encdec.so
     
 # Gatekeeper
 PRODUCT_PACKAGES += \

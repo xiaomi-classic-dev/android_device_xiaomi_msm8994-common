@@ -1,0 +1,6 @@
+cc_binary {
+    name: "lowi-legacy-qmi",
+    srcs: ["lowi_legacy_qmi.c"],
+    vendor: true,
+    compile_multilib: "64",
+}
