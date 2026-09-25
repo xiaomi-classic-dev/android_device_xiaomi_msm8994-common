@@ -35,6 +35,8 @@ LOCAL_SRC_FILES += \
 
 LOCAL_CFLAGS := -Wall -Wextra -Werror
 LOCAL_CFLAGS += -DHAS_MULTIMEDIA_HINTS
+# Legacy QCamera2 uses String8::string() and String8::isEmpty().
+LOCAL_CFLAGS += -DENABLE_STRING8_OBSOLETE_METHODS
 
 # Android 12 removed the Qualcomm-only camera1 command and face-metadata ABI
 # from system/camera.h.  Use the HAL's standard camera1 path instead of writing
