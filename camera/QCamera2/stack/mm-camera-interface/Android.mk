@@ -19,10 +19,6 @@ ifneq (,$(filter msm8974 msm8916 msm8226 msm8610 msm8916 apq8084 msm8084 msm8994
 endif
 
 LOCAL_CFLAGS += -D_ANDROID_
-LOCAL_COPY_HEADERS_TO := mm-camera-interface
-LOCAL_COPY_HEADERS += ../common/cam_intf.h
-LOCAL_COPY_HEADERS += ../common/cam_types.h
-
 LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/inc \
     $(LOCAL_PATH)/../common \
