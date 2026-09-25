@@ -26,22 +26,22 @@ $(shell mkdir -p $(TARGET_OUT_ETC)/firmware/wlan/qca_cld; \
 	    $(TARGET_OUT_ETC)/firmware/wlan/qca_cld/wlan_mac.bin)
 # END WiFi symlinks
 
-RFS_MSM_ADSP_SYMLINKS := $(TARGET_OUT)/rfs/msm/adsp/
+RFS_MSM_ADSP_SYMLINKS := $(TARGET_OUT)/rfs/msm/adsp
 $(RFS_MSM_ADSP_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
 	@echo "Creating RFS MSM ADSP folder structure: $@"
 	@rm -rf $@/*
-	@mkdir -p $(dir $@)/readonly
+	@mkdir -p $@/readonly
 	$(hide) ln -sf /data/tombstones/lpass $@/ramdumps
 	$(hide) ln -sf /persist/rfs/msm/adsp $@/readwrite
 	$(hide) ln -sf /persist/rfs/shared $@/shared
 	$(hide) ln -sf /persist/hlos_rfs/shared $@/hlos
 	$(hide) ln -sf /firmware $@/readonly/firmware
 
-RFS_MSM_MPSS_SYMLINKS := $(TARGET_OUT)/rfs/msm/mpss/
+RFS_MSM_MPSS_SYMLINKS := $(TARGET_OUT)/rfs/msm/mpss
 $(RFS_MSM_MPSS_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
 	@echo "Creating RFS MSM MPSS folder structure: $@"
 	@rm -rf $@/*
-	@mkdir -p $(dir $@)/readonly
+	@mkdir -p $@/readonly
 	$(hide) ln -sf /data/tombstones/modem $@/ramdumps
 	$(hide) ln -sf /persist/rfs/msm/mpss $@/readwrite
 	$(hide) ln -sf /persist/rfs/shared $@/shared
