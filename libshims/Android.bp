@@ -5,31 +5,3 @@ cc_library_shared {
     vendor: true,
     compile_multilib: "64",
 }
-
-// Android 11 no longer installs these legacy HIDL libraries. Older Qualcomm
-// radio blobs still have DT_NEEDED entries for their original sonames.
-cc_library_shared {
-    name: "hidl_base_compat_msm8994",
-    stem: "android.hidl.base@1.0",
-    shared_libs: ["libhidlbase"],
-}
-
-cc_library_shared {
-    name: "hidl_manager_compat_msm8994",
-    stem: "android.hidl.manager@1.0",
-    shared_libs: ["libhidlbase"],
-}
-
-cc_library_shared {
-    name: "hidl_base_compat_msm8994_vendor",
-    stem: "android.hidl.base@1.0",
-    shared_libs: ["libhidlbase"],
-    vendor: true,
-}
-
-cc_library_shared {
-    name: "hidl_manager_compat_msm8994_vendor",
-    stem: "android.hidl.manager@1.0",
-    shared_libs: ["libhidlbase"],
-    vendor: true,
-}

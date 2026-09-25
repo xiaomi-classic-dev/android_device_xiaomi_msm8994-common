@@ -115,10 +115,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hidl.base@1.0 \
     android.hidl.manager@1.0 \
-    hidl_base_compat_msm8994 \
-    hidl_base_compat_msm8994_vendor \
-    hidl_manager_compat_msm8994 \
-    hidl_manager_compat_msm8994_vendor \
     libhidltransport \
     libhwbinder
 
