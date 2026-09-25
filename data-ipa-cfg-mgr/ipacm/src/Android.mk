@@ -13,11 +13,8 @@ endif
 LOCAL_C_INCLUDES += external/libxml2/include
 LOCAL_C_INCLUDES += external/libnetfilter_conntrack/include
 LOCAL_C_INCLUDES += external/libnfnetlink/include
-
-LOCAL_HEADER_LIBRARIES := generated_kernel_headers
-
-
-LOCAL_CFLAGS := -v
+# Keep Bionic's generic Linux UAPI headers ahead of the legacy IPA header.
+LOCAL_CFLAGS := -idirafter $(TARGET_KERNEL_SOURCE)/include/uapi
 LOCAL_CFLAGS += -DFEATURE_IPA_ANDROID
 LOCAL_CFLAGS += -DDEBUG
 
