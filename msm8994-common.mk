@@ -193,6 +193,10 @@ PRODUCT_PACKAGES += \
     libshim_powermanager \
     vendor.lineage.livedisplay@2.0-service-legacymm
 
+# IMS runs in com.android.phone and needs platform-private native libraries.
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/ims-privapp-permissions.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/ims-privapp-permissions.xml
+
 # OMX
 PRODUCT_PACKAGES += \
     android.hardware.drm@1.0-impl \
