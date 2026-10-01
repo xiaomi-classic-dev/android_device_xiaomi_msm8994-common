@@ -17,20 +17,16 @@
 #ifndef ANDROID_HARDWARE_LIGHT_V2_0_LIGHT_H
 #define ANDROID_HARDWARE_LIGHT_V2_0_LIGHT_H
 
-#include <android/hardware/light/2.0/ILight.h>
+#include <aidl/android/hardware/light/BnLights.h>
 #include <hardware/lights.h>
-#include <hidl/Status.h>
 #include <map>
 #include <mutex>
 #include <vector>
 
-using ::android::hardware::Return;
-using ::android::hardware::Void;
-using ::android::hardware::light::V2_0::Flash;
-using ::android::hardware::light::V2_0::ILight;
-using ::android::hardware::light::V2_0::LightState;
-using ::android::hardware::light::V2_0::Status;
-using ::android::hardware::light::V2_0::Type;
+using aidl::android::hardware::light::HwLight;
+using LightState = aidl::android::hardware::light::HwLightState;
+using Type = aidl::android::hardware::light::LightType;
+using Flash = aidl::android::hardware::light::FlashMode;
 
 typedef void (*LightStateHandler)(const LightState&);
 
@@ -44,25 +40,17 @@ struct LightBackend {
     }
 };
 
-namespace android {
-namespace hardware {
-namespace light {
-namespace V2_0 {
-namespace implementation {
+namespace aidl::android::hardware::light::implementation {
 
-class Light : public ILight {
+class Light : public BnLights {
    public:
-    Return<Status> setLight(Type type, const LightState& state) override;
-    Return<void> getSupportedTypes(getSupportedTypes_cb _hidl_cb) override;
+    ndk::ScopedAStatus setLightState(int32_t id, const HwLightState& state) override;
+    ndk::ScopedAStatus getLights(std::vector<HwLight>* lights) override;
 
    private:
     std::mutex globalLock;
 };
 
-}  // namespace implementation
-}  // namespace V2_0
-}  // namespace light
-}  // namespace hardware
-}  // namespace android
+}  // namespace aidl::android::hardware::light::implementation
 
 #endif  // ANDROID_HARDWARE_LIGHT_V2_0_LIGHT_H

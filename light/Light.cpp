@@ -217,14 +217,11 @@ static std::vector<LightBackend> backends = {
 
 }  // anonymous namespace
 
-namespace android {
-namespace hardware {
-namespace light {
-namespace V2_0 {
-namespace implementation {
+namespace aidl::android::hardware::light::implementation {
 
-Return<Status> Light::setLight(Type type, const LightState& state) {
-    LightStateHandler handler;
+ndk::ScopedAStatus Light::setLightState(int32_t id, const HwLightState& state) {
+    const Type type = static_cast<Type>(id);
+    LightStateHandler handler = nullptr;
     bool handled = false;
 
     /* Lock global mutex until light state is updated. */
@@ -240,7 +237,7 @@ Return<Status> Light::setLight(Type type, const LightState& state) {
 
     /* If no handler has been found, then the type is not supported. */
     if (!handler) {
-        return Status::LIGHT_NOT_SUPPORTED;
+        return ndk::ScopedAStatus::fromExceptionCode(EX_UNSUPPORTED_OPERATION);
     }
 
     /* Light up the type with the highest priority that matches the current handler. */
@@ -257,23 +254,21 @@ Return<Status> Light::setLight(Type type, const LightState& state) {
         handler(state);
     }
 
-    return Status::SUCCESS;
+    return ndk::ScopedAStatus::ok();
 }
 
-Return<void> Light::getSupportedTypes(getSupportedTypes_cb _hidl_cb) {
+ndk::ScopedAStatus Light::getLights(std::vector<HwLight>* lights) {
+    lights->clear();
     std::vector<Type> types;
-
-    for (const LightBackend& backend : backends) {
-        types.push_back(backend.type);
+    for (const LightBackend& backend : backends) types.push_back(backend.type);
+    for (const Type type : types) {
+        HwLight light;
+        light.id = static_cast<int32_t>(type);
+        light.ordinal = 0;
+        light.type = type;
+        lights->push_back(light);
     }
-
-    _hidl_cb(types);
-
-    return Void();
+    return ndk::ScopedAStatus::ok();
 }
 
-}  // namespace implementation
-}  // namespace V2_0
-}  // namespace light
-}  // namespace hardware
-}  // namespace android
+}  // namespace aidl::android::hardware::light::implementation

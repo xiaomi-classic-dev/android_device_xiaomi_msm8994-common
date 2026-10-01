@@ -35,6 +35,8 @@ TARGET_USES_NEW_ION_API :=true
 TARGET_USES_OVERLAY := true
 TARGET_USES_C2D_COMPOSITION := true
 TARGET_USES_GRALLOC1_ADAPTER := true
+# Keep the device's mapper 2.0 fallback when running Android 16 and newer.
+$(call soong_config_set_bool,libui,legacy_gralloc,true)
 TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
 MAX_VIRTUAL_DISPLAY_DIMENSION := 2048
 TARGET_USES_HWC2 := true

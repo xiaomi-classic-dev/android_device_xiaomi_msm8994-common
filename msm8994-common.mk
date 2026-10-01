@@ -1,5 +1,8 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 
+# Retain the framework matrix for these devices' declared FCM level.
+PRODUCT_PACKAGES += framework_compatibility_matrix.5.xml
+
 # Get non-open-source specific aspects
 $(call inherit-product-if-exists, vendor/xiaomi/msm8994-common/msm8994-common-vendor.mk)
 
@@ -156,11 +159,10 @@ PRODUCT_PACKAGES += \
     memtrack.$(BOARD_PLATFORM) \
     liboverlay \
     libtinyxml \
-    android.hardware.configstore@1.1-service \
     android.hardware.graphics.allocator@2.0-impl \
     android.hardware.graphics.allocator@2.0-service \
     android.hardware.graphics.mapper@2.0-impl \
-    android.hardware.memtrack@1.0-impl \
+    android.hardware.memtrack-service.legacy \
     android.hardware.graphics.composer@2.1-service
 
 # Health
@@ -188,12 +190,12 @@ PRODUCT_COPY_FILES += \
 
 # Lights
 PRODUCT_PACKAGES += \
-    android.hardware.light@2.0-service.xiaomi_msm8994
+    android.hardware.light-service.xiaomi_msm8994
 
 # LiveDisplay
 PRODUCT_PACKAGES += \
     libshim_powermanager \
-    vendor.lineage.livedisplay@2.0-service-legacymm
+    vendor.lineage.livedisplay-service.legacymm
 
 # IMS runs in com.android.phone and needs platform-private native libraries.
 PRODUCT_COPY_FILES += \

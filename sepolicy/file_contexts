@@ -18,3 +18,12 @@
 /system/vendor/bin/init\.qcom\.sh					u:object_r:qti_init_shell_exec:s0
 /system/vendor/bin/init\.qcom\.post_boot\.sh		u:object_r:qti_init_shell_exec:s0
 /system/vendor/bin/init\.qcom\.usb\.sh				u:object_r:qti_init_shell_exec:s0
+
+/vendor/bin/hw/android\.hardware\.light-service\.xiaomi_msm8994 u:object_r:hal_light_default_exec:s0
+/vendor/bin/hw/android\.hardware\.ir-service\.libra u:object_r:hal_ir_default_exec:s0
+/(vendor|system/vendor)/bin/hw/vendor\.lineage\.livedisplay-service\.legacymm u:object_r:hal_lineage_livedisplay_qti_exec:s0
+
+# Preserve metadata labels on Libra's userdata backing directory.
+/data/metadata(/.*)? u:object_r:metadata_file:s0
+/data/metadata/aconfig(/.*)? u:object_r:aconfig_storage_metadata_file:s0
+/data/metadata/aconfig/flags(/.*)? u:object_r:aconfig_storage_flags_metadata_file:s0
