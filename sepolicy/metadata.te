@@ -1,0 +1,8 @@
+# Libra backs /metadata with /data/metadata because it has no metadata partition.
+# These platform labels therefore also describe files on the userdata filesystem.
+typeattribute metadata_file data_file_type;
+typeattribute metadata_file core_data_file_type;
+typeattribute aconfig_storage_metadata_file data_file_type;
+typeattribute aconfig_storage_metadata_file core_data_file_type;
+typeattribute aconfig_storage_flags_metadata_file data_file_type;
+typeattribute aconfig_storage_flags_metadata_file core_data_file_type;
